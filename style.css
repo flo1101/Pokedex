@@ -4,6 +4,7 @@
 
 html {
     overflow-y: scroll;
+    scroll-behavior: smooth;
 }
 
 body {
@@ -42,6 +43,30 @@ header, main{
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 2rem;
+}
+
+#to-top-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2.5rem;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background-color: #545454;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .2s;
+}
+
+#to-top-btn:hover {
+    background-color: #626262;
+}
+
+#to-top-btn > .ri-arrow-up-s-line {
+    text-align: center;
     font-size: 2rem;
 }
 
@@ -92,14 +117,18 @@ input {
 
 .grid-item {
     position: relative;
+    height: 15rem;
 }
 
 .item-top {
+    width: 100%;
+    height: 100%;
     position: relative;
     background-color: #fff;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
     padding: 1rem 0;
     border-radius: 1rem;
     cursor: pointer;
@@ -149,6 +178,7 @@ input {
     font-weight: 700;
     line-height: 1;
     text-align: center;
+    padding: 0 1rem;
 }
 
 .item-id {
