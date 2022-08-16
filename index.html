@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link id="page-style" rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>National Pokédex</title>
+    <link href="./res/favicon.ico" rel="icon" type="image/x-icon" />
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <a href="index.html">
+            <h1>National Pokédex</h1>
+        </a>
+        <form action="submit" id="search-box">
+            <div id="search-input-box">
+                <input id="search-input" type="text" placeholder="Search Pokédex">
+                <i class="ri-search-line"></i>
+            </div>
+        </form>
+    </header>
+    <main>
+        <div id="settings-bar">
+            <div id="type-filter">
+                <span class="setting-name">Type Filter</span>
+                <i class="ri-arrow-down-s-line"></i>
+            </div>
+            <div id="type-dropdown">
+                <div class="type-item" id="bug">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/bug.svg" alt="bug">
+                        </div>
+                        Bug
+                    </div>
+                </div>
+                <div class="type-item" id="dark">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/dark.svg" alt="dark">
+                        </div>
+                        Dark
+                    </div>
+                </div>
+                <div class="type-item" id="dragon">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/dragon.svg" alt="dragon">
+                        </div>
+                        Dragon
+                    </div>
+                </div>
+                <div class="type-item" id="electric">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/electric.svg" alt="electric">
+                        </div>
+                        Electric
+                    </div>
+                </div>
+                <div class="type-item" id="fairy">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/fairy.svg" alt="fairy">
+                        </div>
+                        Fairy
+                    </div>
+                </div>
+                <div class="type-item" id="fighting">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/fighting.svg" alt="fightings">
+                        </div>
+                        Fighting
+                    </div>
+                </div>
+                <div class="type-item" id="fire">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/fire.svg" alt="fire">
+                        </div>
+                        Fire
+                    </div>
+                </div>
+                <div class="type-item" id="flying">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/flying.svg" alt="flying">
+                        </div>
+                        Flying
+                    </div>
+                </div>
+                <div class="type-item" id="ghost">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/ghost.svg" alt="ghost">
+                        </div>
+                        Ghost
+                    </div>
+                </div>
+                <div class="type-item" id="grass">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/grass.svg" alt="grass">
+                        </div>
+                        Grass
+                    </div>
+                </div>
+                <div class="type-item" id="ground">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/ground.svg" alt="ground">
+                        </div>
+                        Ground
+                    </div>
+                </div>
+                <div class="type-item" id="ice">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/ice.svg" alt="ice">
+                        </div>
+                        Ice
+                    </div>
+                </div>
+                <div class="type-item"  id="normal">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/normal.svg" alt="normal">
+                        </div>
+                        Normal
+                    </div>
+                </div>
+                <div class="type-item" id="poison">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/poison.svg" alt="poison">
+                        </div>
+                        Poison
+                    </div>
+                </div>
+                <div class="type-item" id="psychic">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/psychic.svg" alt="psychic">
+                        </div>
+                        Psychic
+                    </div>
+                </div>
+                <div class="type-item" id="rock">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/rock.svg" alt="rock">
+                        </div>
+                        Rock
+                    </div>
+                </div>
+                <div class="type-item" id="steel">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/steel.svg" alt="steel">
+                        </div>
+                        Steel
+                    </div>
+                </div>
+                <div class="type-item" id="water">
+                    <div class="checkbox">
+                        <i class="ri-check-line"></i>
+                    </div>
+                    <div class="type-content">
+                        <div class="type-icon">
+                            <img src="./res/type-icons/water.svg" alt="water">
+                        </div>
+                        Water
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="alert-box"></div>
+        <div id="grid-box">
+<!--            <div class="grid-item">-->
+<!--                <div class="item-top">-->
+<!--                    <span class="item-id">#001</span>-->
+<!--                    <div class="img-box">-->
+<!--                        <img src="./res/2.png" alt="Ivysaur" class="item-img">-->
+<!--                    </div>-->
+<!--                    <span class="item-name">Ivysaur</span>-->
+<!--                </div>-->
+<!--                <div class="item-bottom"></div>-->
+<!--            </div>-->
+        </div>
+    </main>
+</body>
+</html>
