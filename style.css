@@ -272,14 +272,10 @@ input {
     background-color: transparent;
 }
 
-.ri-arrow-down-s-line {
-    color: #212121;
-    transform: scale(1.6);
-}
-
-.ri-arrow-up-s-line {
-    color: #212121;
-    transform: scale(1.6);
+.ri-arrow-down-s-line, .ri-arrow-up-s-line {
+    color: #bababa;
+    line-height: 1;
+    font-size: 1.8rem;
 }
 
 
