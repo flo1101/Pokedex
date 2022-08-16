@@ -95,6 +95,7 @@ input {
 }
 
 .item-top {
+    position: relative;
     background-color: #fff;
     display: flex;
     flex-direction: column;
@@ -107,10 +108,12 @@ input {
 }
 
 .item-bottom {
+    visibility: hidden;
     position: absolute;
     top: 0;
     z-index: -1;
-    background-color: #ff5252;
+    background: rgb(252,72,80);
+    background: linear-gradient(328deg, rgba(252,72,80,1) 0%, rgba(255,111,54,1) 100%);
     width: 100%;
     height: 100%;
     border-radius: 1rem;
@@ -118,8 +121,17 @@ input {
     transition-timing-function: ease-in-out;
 }
 
-.item-top:hover {
-    transform: translate(0.3rem, -0.3rem);
+.grid-item:hover > .item-top {
+    transform: translate(0.25rem, -0.25rem);
+}
+
+.grid-item:hover > .item-bottom {
+    visibility: visible;
+    transform: translate(-0.25rem, 0.25rem);
+}
+
+.item-top:hover > .item-arrow {
+    transform: scale(1);
 }
 
 .img-box {
@@ -146,6 +158,27 @@ input {
     line-height: 1;
 }
 
+.item-arrow {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    border-radius: 50%;
+    width: 1.8rem;
+    height: 1.8rem;
+    background-color: #c8c8c8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center;
+    transform: scale(0);
+    transition: .2s;
+}
+
+.ri-arrow-drop-right-line {
+    color: #fff;
+    font-size: 2.5rem;
+    line-height: 1;
+}
 
 /* Filter */
 
@@ -185,6 +218,7 @@ input {
     box-shadow: 0 0 .7rem #616161;
     scrollbar-width: none;
     visibility: hidden;
+    z-index: 5;
 }
 
 #type-dropdown::-webkit-scrollbar {

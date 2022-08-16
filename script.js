@@ -63,6 +63,9 @@ function createItemHtml(pokemon) {
                         <img src="${sprite}" alt="${name}" class="item-img">
                     </div>
                     <span class="item-name">${name}</span>
+                    <div class="item-arrow">
+                        <i class="ri-arrow-drop-right-line"></i>
+                    </div>
                 </div>
                 <div class="item-bottom"></div>
             </div>`
@@ -148,8 +151,8 @@ typeItems.forEach(item => item.addEventListener("click", e => {
     const checkbox = item.querySelector(".checkbox");
     if (!activeTypeFilter.includes(filterName)) {
         activeTypeFilter.push(filterName);
-        checkbox.style.backgroundColor = "#ff4646";
-        checkbox.style.borderColor = "#ff4646"
+        checkbox.style.backgroundColor = "#FC4850";
+        checkbox.style.borderColor = "#FC4850"
         applyTypeFilter(filterName);
     } else {
         const index = activeTypeFilter.indexOf(filterName);
