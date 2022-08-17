@@ -19,6 +19,7 @@ body {
 
 a {
     text-decoration: none;
+    line-height: 1;
 }
 
 h1 {
@@ -237,13 +238,16 @@ input {
     position: absolute;
     margin-top: .5rem;
     background-color: #fff;
-    border: 1rem solid #fff;
+    border: .8rem solid #fff;
+    border-left: none;
+    border-right: none;
+    padding: .2rem 1rem;
     border-radius: .6rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     width: 14rem;
-    height: 20rem;
+    height: 30rem;
     overflow: auto;
     box-shadow: 0 0 .7rem #616161;
     scrollbar-width: none;
@@ -264,6 +268,11 @@ input {
     margin-bottom: .5rem;
 }
 
+.type-item:hover > .type-content {
+    filter: saturate(200%);
+    transform: scale(1.04);
+}
+
 .type-item:last-of-type {
     margin-bottom: 0;
 }
@@ -271,13 +280,13 @@ input {
 
 .type-content {
     padding: .5rem .7rem;
-    background-color: #616161;
     display: flex;
     width: 10rem;
     line-height: 1;
     font-weight: 600;
     border-radius: 1rem;
-    background-color: #a9a9a9;
+    transition: .2s;
+    transition-timing-function: ease-in-out;
 }
 
 .type-icon {
