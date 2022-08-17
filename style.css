@@ -166,6 +166,7 @@ input {
 
 .img-box {
     height: 10rem;
+    padding: .5rem 0;
 }
 
 .item-img {
