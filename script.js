@@ -4,14 +4,14 @@ let nationalDex = [];
 let displayedItems;
 
 // Initial Page Load
-window.addEventListener("load", async () => {
-    alertBox.innerHTML = "Loading Pokédex...";
-    nationalDex = await getNationalDex();
-    await displayPokemon(nationalDex);
-    alertBox.style.display = "none";
-    alertBox.innerHTML = "";
-    displayedItems = nationalDex.slice();
-});
+// window.addEventListener("load", async () => {
+//     alertBox.innerHTML = "Loading Pokédex...";
+//     nationalDex = await getNationalDex();
+//     await displayPokemon(nationalDex);
+//     alertBox.style.display = "none";
+//     alertBox.innerHTML = "";
+//     displayedItems = nationalDex.slice();
+// });
 
 async function getNationalDex() {
     try {
