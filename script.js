@@ -103,15 +103,28 @@ async function fetchPokemon(input) {
     }
 }
 
+async function fetchSpecies(input) {
+    try {
+        const url = `https://pokeapi.co/api/v2/pokemon-species/`;
+        const res = await fetch(url + input);
+        return await res.json();
+    } catch (e) {
+        console.log("ERROR: ", e);
+    }
+}
+
 
 // Search Pokemon
 const form = document.querySelector("#search-box");
 const input = document.querySelector("#search-input");
 
 form.addEventListener("keyup", searchPokemon)
-form.addEventListener("submit", e => {
+form.addEventListener("submit", async e => {
     e.preventDefault();
-    searchPokemon();
+    const value = input.value.toLowerCase();
+    if (!nationalDex.map(pokemon => pokemon.name).includes(value)) return;
+    await displayDetailPage(value);
+
 });
 
 function searchPokemon() {
@@ -188,10 +201,16 @@ async function removeTypeFilter() {
 function addDetailPageClickEvents() {
     const gridItems = document.querySelectorAll(".item-top");
     gridItems.forEach(gridItem => gridItem.addEventListener("click", async e => {
-        const name = e.currentTarget.querySelector(".item-name").textContent.toLowerCase();
-        const data = await fetchPokemon(name);
-        main.innerHTML =
-            `<div class="grid-details-one">
+        const pokemon = e.currentTarget.querySelector(".item-name").textContent.toLowerCase();
+        await displayDetailPage(pokemon);
+    }));
+}
+
+async function displayDetailPage(pokemon) {
+    const pokemonData = await fetchPokemon(pokemon);
+    const speciesData = await fetchSpecies(pokemon);
+    main.innerHTML =
+        `<div class="grid-details-one">
                 <div class="arrow-btn" id="details-back-btn">
                     <i class="ri-arrow-left-s-line"></i>
                 </div>
@@ -379,32 +398,36 @@ function addDetailPageClickEvents() {
                     </div>
                 </div>
             </div>`;
-        addValuesDetailPage(data);
-    }));
+    addValuesDetailPage(pokemonData, speciesData);
 }
 
-function addValuesDetailPage(data) {
-    const id = getDisplayableID(data.id);
-    const name = firstLetterUppercase(data.name);
-    const img = data.sprites.other["official-artwork"].front_default;
-    const description = "";
+function addValuesDetailPage(pokemonData, speciesData) {
+    const id = getDisplayableID(pokemonData.id);
+    const name = firstLetterUppercase(pokemonData.name);
+    const img = pokemonData.sprites.other["official-artwork"].front_default;
+    const description = getFlavorText(speciesData);
     setNameImgDescID(name, img, description, id);
 
-    const types = data.types.map(type => type.type.name);
+    const types = pokemonData.types.map(type => type.type.name);
     setTypes(types);
 
-    const heightMtr = data.height / 10;
-    const weightKg = data.weight / 10;
+    const heightMtr = pokemonData.height / 10;
+    const weightKg = pokemonData.weight / 10;
     const gender = "";
     setProps(heightMtr, weightKg, gender);
 
-    const hp = data.stats[0].base_stat;
-    const att = data.stats[1].base_stat;
-    const def = data.stats[2].base_stat;
-    const spAtt = data.stats[3].base_stat;
-    const spDef = data.stats[4].base_stat;
-    const init = data.stats[5].base_stat;
+    const hp = pokemonData.stats[0].base_stat;
+    const att = pokemonData.stats[1].base_stat;
+    const def = pokemonData.stats[2].base_stat;
+    const spAtt = pokemonData.stats[3].base_stat;
+    const spDef = pokemonData.stats[4].base_stat;
+    const init = pokemonData.stats[5].base_stat;
     setStats(hp, att, def, spAtt, spDef, init);
+}
+
+function getFlavorText(speciesData) {
+    let text = speciesData.flavor_text_entries[0].flavor_text;
+    return text.replaceAll("\n"," ").replaceAll("\f", " ");
 }
 
 function setNameImgDescID(name, img, description, id) {
@@ -422,7 +445,7 @@ function setTypes(types) {
         const typeName = firstLetterUppercase(type);
         const typeDiv = document.createElement("div");
         typeDiv.classList.add("detail-type");
-        typeDiv.style.background = `var(--bg-${type});`
+        typeDiv.style.background = `var(--bg-${type})`;
         typeDiv.innerHTML = `<div class="detail-type-img">
                                 <img src="${iconPath}" alt="${typeName}">
                         </div>
@@ -432,7 +455,6 @@ function setTypes(types) {
 }
 
 function setProps(height, weight, gender) {
-    console.log(weight, gender)
     document.querySelector(".details-height").innerHTML = height + " m";
     document.querySelector(".details-weight").innerHTML = weight + " kg";
     document.querySelector(".details-gender").innerHTML = gender;
@@ -440,12 +462,17 @@ function setProps(height, weight, gender) {
 
 function setStats(hp, att, def, spAtt, spDef, init) {
     document.querySelector(".details-hp").innerHTML = hp;
-    document.querySelector(".details-hp.circle").innerHTML = 301-hp;
     document.querySelector(".details-att").innerHTML = att;
     document.querySelector(".details-def").innerHTML = def;
     document.querySelector(".details-sp-att").innerHTML = spAtt;
     document.querySelector(".details-sp-def").innerHTML = spDef;
     document.querySelector(".details-init").innerHTML = init;
+    document.querySelector(".details-hp-circle").style.strokeDashoffset = 301 - hp;
+    document.querySelector(".details-att-circle").style.strokeDashoffset = 301 - att;
+    document.querySelector(".details-def-circle").style.strokeDashoffset = 301 - def;
+    document.querySelector(".details-sp-att-circle").style.strokeDashoffset = 301 - spAtt;
+    document.querySelector(".details-sp-def-circle").style.strokeDashoffset = 301 - spDef;
+    document.querySelector(".details-init-circle").style.strokeDashoffset = 301 - init;
 }
 
 /*
