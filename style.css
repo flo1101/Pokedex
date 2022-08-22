@@ -117,11 +117,13 @@ header {
 .scroll > div {
     animation: animate 80s linear infinite;
     animation-delay: -80s;
+    animation-play-state: paused;
 }
 
 .scroll > div:nth-child(2) {
     animation: animate2 80s linear infinite;
     animation-delay: -40s;
+    animation-play-state: paused;
 }
 
 @keyframes animate{
@@ -421,28 +423,19 @@ input {
     margin-top: 2rem;
 }
 
-.details-props > div > span {
+.details-prop-name {
     font-weight: 600;
 }
 
 .detail-type {
     padding: .7rem;
     border-radius: 1.4rem;
-    background-color: #616161;
     display: flex;
     align-content: center;
     width: 7.5rem;
     line-height: 1.1;
     margin-right: .6rem;
     font-weight: 600;
-}
-
-.detail-type:first-child {
-    background-color: var(--bg-psychic);
-}
-
-.detail-type:last-child {
-    background-color: var(--bg-flying);
 }
 
 .detail-type-img {
@@ -516,7 +509,7 @@ circle{
     fill: none;
     width: 100%;
     stroke-dasharray: 301;
-    stroke-dashoffset: 100;
+    stroke-dashoffset: 0;
     height: 100%;
     stroke: #2cd0e8;
     stroke-width: 5;

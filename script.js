@@ -1,5 +1,6 @@
 const gridBox = document.querySelector("#grid-box");
 const alertBox = document.querySelector("#alert-box");
+const main = document.querySelector("main");
 let nationalDex = [];
 let displayedItems;
 
@@ -8,7 +9,6 @@ window.addEventListener("load", async () => {
     alertBox.innerHTML = "Loading Pokédex...";
     nationalDex = await getNationalDex();
     await displayPokemon(nationalDex);
-    addClickEvents();
     alertBox.style.display = "none";
     alertBox.innerHTML = "";
     displayedItems = nationalDex.slice();
@@ -50,6 +50,7 @@ function displayPokemon(pokemon) {
         html += createItemHtml(mon);
     }
     gridBox.innerHTML = html;
+    addDetailPageClickEvents();
 }
 
 
@@ -184,12 +185,484 @@ async function removeTypeFilter() {
 
 // Detail Pages
 
-function addClickEvents() {
+function addDetailPageClickEvents() {
     const gridItems = document.querySelectorAll(".item-top");
-    gridItems.forEach(gridItem => gridItem.addEventListener("click", e => {
-
+    gridItems.forEach(gridItem => gridItem.addEventListener("click", async e => {
+        const name = e.currentTarget.querySelector(".item-name").textContent.toLowerCase();
+        const data = await fetchPokemon(name);
+        main.innerHTML =
+            `<div class="grid-details-one">
+                <div class="arrow-btn" id="details-back-btn">
+                    <i class="ri-arrow-left-s-line"></i>
+                </div>
+                <div class="details-panel panel-1">
+                    <div class="details-img-box">
+                        <img class="details-img" src="" alt="">
+                    </div>
+                    <img class="circle-bg" src="./res/circles-bg.svg">
+                </div>
+                <div class="panel-2">
+                    <div>
+                        <span class="details-id"></span>
+                        <h2 class="details-name"></h2>
+                    </div>
+                    <p class="details-flavor-text"></p>
+                </div>
+                <div class="details-panel panel-3">
+                    <div class="details-types"></div>
+                    <div class="details-props">
+                        <div><span class="details-prop-name">Height:</span><br><span class="details-height"></span></div>
+                        <div><span class="details-prop-name">Weight:</span><br><span class="details-weight"></span></div>
+                        <div><span class="details-prop-name">Gender:</span><br><span class="details-gender"></span></div>
+                    </div>
+                </div>
+                <div class="details-panel panel-4">
+                    <div class="stats-grid-item stat-hp">
+                        <div class="animation-box">
+                            <svg class="stats-loaded-circle">
+                                <circle class="details-hp-circle" cx="50%" cy="50%" r="50%"/>
+                            </svg>
+                            <div class="stats-bg-circle"></div>
+                            <span class="stat-value details-hp"></span>
+                        </div>
+                        <span class="stat-name">HP</span>
+                    </div>
+                    <div class="stats-grid-item stat-attack">
+                        <div class="animation-box">
+                            <svg class="stats-loaded-circle">
+                                <circle class="details-att-circle" cx="50%" cy="50%" r="50%"/>
+                            </svg>
+                            <div class="stats-bg-circle"></div>
+                            <span class="stat-value details-att"></span>
+                        </div>
+                        <span class="stat-name">Attack</span>
+                    </div>
+                    <div class="stats-grid-item stat-defense">
+                        <div class="animation-box">
+                            <svg class="stats-loaded-circle">
+                                <circle class="details-def-circle" cx="50%" cy="50%" r="50%"/>
+                            </svg>
+                            <div class="stats-bg-circle"></div>
+                            <span class="stat-value details-def"></span>
+                        </div>
+                        <span class="stat-name">Defense</span>
+                    </div>
+                    <div class="stats-grid-item stat-sp-attack">
+                        <div class="animation-box">
+                            <svg class="stats-loaded-circle">
+                                <circle class="details-sp-att-circle" cx="50%" cy="50%" r="50%"/>
+                            </svg>
+                            <div class="stats-bg-circle"></div>
+                            <span class="stat-value details-sp-att"></span>
+                        </div>
+                        <span class="stat-name">Sp-Attack</span>
+                    </div>
+                    <div class="stats-grid-item stat-sp-defense">
+                        <div class="animation-box">
+                            <svg class="stats-loaded-circle">
+                                <circle class="details-sp-def-circle" cx="50%" cy="50%" r="50%"/>
+                            </svg>
+                            <div class="stats-bg-circle"></div>
+                            <span class="stat-value details-sp-def"></span>
+                        </div>
+                        <span class="stat-name">Sp-Defense</span>
+                    </div>
+                    <div class="stats-grid-item stat-init">
+                        <div class="animation-box">
+                            <svg class="stats-loaded-circle">
+                                <circle class="details-init-circle" cx="50%" cy="50%" r="50%"/>
+                            </svg>
+                            <div class="stats-bg-circle"></div>
+                            <span class="stat-value details-init"></span>
+                        </div>
+                        <span class="stat-name">Initiative</span>
+                    </div>
+                </div>
+            </div>
+            <h2>Abilities & Evolutions</h2>
+            <div class="grid-details-two">
+                <div class="details-panel panel-5">
+                    <div class="abilities-content">
+                        <div class="ability-one">
+                            <span>Pressure</span>
+                            <p>Increases the PP cost of moves targetting the Pokémon by one.</p>
+                        </div>
+                        <div class="abilities-break"></div>
+                        <div class="ability-two">
+                            <span>Multiscale (hidden)</span>
+                            <p>This Pokémon takes half as much damage when it is hit having full HP.</p>
+                        </div>
+                    </div>
+                    <div class="bg-shape-abilities"></div>
+                    <img src="./res/circles-bg-2.svg">
+                </div>
+                <div class="details-panel panel-6">
+                    <div class="grid-item evolution-item">
+                        <div class="item-top">
+                            <span class="item-id">#001</span>
+                            <div class="img-box">
+                                <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
+                            </div>
+                            <span class="item-name">Lugia</span>
+                            <div class="item-arrow">
+                                <i class="ri-arrow-drop-right-line"></i>
+                            </div>
+                        </div>
+                        <div class="item-bottom"></div>
+                    </div>
+                    <div class="evolution-btn-box">
+                        <div class="arrow-btn">
+                            <i class="ri-arrow-right-s-line"></i>
+                        </div>
+                    </div>
+                    <div class="grid-item evolution-item">
+                        <div class="item-top">
+                            <span class="item-id">#001</span>
+                            <div class="img-box">
+                                <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
+                            </div>
+                            <span class="item-name">Lugia</span>
+                            <div class="item-arrow">
+                                <i class="ri-arrow-drop-right-line"></i>
+                            </div>
+                        </div>
+                        <div class="item-bottom"></div>
+                    </div>
+                    <div class="evolution-btn-box">
+                        <div class="arrow-btn">
+                            <i class="ri-arrow-right-s-line"></i>
+                        </div>
+                    </div>
+                    <div class="grid-item evolution-item">
+                        <div class="item-top">
+                            <span class="item-id">#001</span>
+                            <div class="img-box">
+                                <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
+                            </div>
+                            <span class="item-name">Lugia</span>
+                            <div class="item-arrow">
+                                <i class="ri-arrow-drop-right-line"></i>
+                            </div>
+                        </div>
+                        <div class="item-bottom"></div>
+                    </div>
+                </div>
+            </div>
+            <h2>Special Forms</h2>
+            <div class="grid-details-two">
+                <div class="details-panel panel-7">
+                    <div class="grid-item evolution-item">
+                        <div class="item-top">
+                            <span class="item-id">#001</span>
+                            <div class="img-box">
+                                <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
+                            </div>
+                            <span class="item-name">Lugia</span>
+                            <div class="item-arrow">
+                                <i class="ri-arrow-drop-right-line"></i>
+                            </div>
+                        </div>
+                        <div class="item-bottom"></div>
+                    </div>
+                    <div class="grid-item evolution-item">
+                        <div class="item-top">
+                            <span class="item-id">#001</span>
+                            <div class="img-box">
+                                <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
+                            </div>
+                            <span class="item-name">Lugia</span>
+                            <div class="item-arrow">
+                                <i class="ri-arrow-drop-right-line"></i>
+                            </div>
+                        </div>
+                        <div class="item-bottom"></div>
+                    </div>
+                </div>
+            </div>`;
+        addValuesDetailPage(data);
     }));
 }
+
+function addValuesDetailPage(data) {
+    const id = getDisplayableID(data.id);
+    const name = firstLetterUppercase(data.name);
+    const img = data.sprites.other["official-artwork"].front_default;
+    const description = "";
+    setNameImgDescID(name, img, description, id);
+
+    const types = data.types.map(type => type.type.name);
+    setTypes(types);
+
+    const heightMtr = data.height / 10;
+    const weightKg = data.weight / 10;
+    const gender = "";
+    setProps(heightMtr, weightKg, gender);
+
+    const hp = data.stats[0].base_stat;
+    const att = data.stats[1].base_stat;
+    const def = data.stats[2].base_stat;
+    const spAtt = data.stats[3].base_stat;
+    const spDef = data.stats[4].base_stat;
+    const init = data.stats[5].base_stat;
+    setStats(hp, att, def, spAtt, spDef, init);
+}
+
+function setNameImgDescID(name, img, description, id) {
+    document.querySelector(".details-name").innerHTML = name;
+    document.querySelector(".details-flavor-text").innerHTML = description;
+    document.querySelector(".details-img").setAttribute("src", img);
+    document.querySelector(".details-img").setAttribute("alt", name);
+    document.querySelector(".details-id").innerHTML = id;
+}
+
+function setTypes(types) {
+    const detailsTypes = document.querySelector(".details-types");
+    types.forEach(type => {
+        const iconPath = `./res/type-icons/${type}.svg`
+        const typeName = firstLetterUppercase(type);
+        const typeDiv = document.createElement("div");
+        typeDiv.classList.add("detail-type");
+        typeDiv.style.background = `var(--bg-${type});`
+        typeDiv.innerHTML = `<div class="detail-type-img">
+                                <img src="${iconPath}" alt="${typeName}">
+                        </div>
+                        ${typeName}`
+        detailsTypes.appendChild(typeDiv);
+    });
+}
+
+function setProps(height, weight, gender) {
+    console.log(weight, gender)
+    document.querySelector(".details-height").innerHTML = height + " m";
+    document.querySelector(".details-weight").innerHTML = weight + " kg";
+    document.querySelector(".details-gender").innerHTML = gender;
+}
+
+function setStats(hp, att, def, spAtt, spDef, init) {
+    document.querySelector(".details-hp").innerHTML = hp;
+    document.querySelector(".details-hp.circle").innerHTML = 301-hp;
+    document.querySelector(".details-att").innerHTML = att;
+    document.querySelector(".details-def").innerHTML = def;
+    document.querySelector(".details-sp-att").innerHTML = spAtt;
+    document.querySelector(".details-sp-def").innerHTML = spDef;
+    document.querySelector(".details-init").innerHTML = init;
+}
+
+/*
+    <div class="grid-details-one">
+        <div class="arrow-btn" id="details-back-btn">
+            <i class="ri-arrow-left-s-line"></i>
+        </div>
+        <div class="details-panel panel-1">
+            <div class="details-img-box">
+                <img src="./res/249.png" alt="">
+            </div>
+            <img class="circle-bg" src="./res/circles-bg.svg">
+        </div>
+        <div class="panel-2">
+            <div>
+                <span>#249</span>
+                <h2>Lugia</h2>
+            </div>
+            <p>It is said that it quitely spends its time deep at the bottom of the sea because its powers are too strong.</p>
+        </div>
+        <div class="details-panel panel-3">
+            <div>
+                <div class="detail-type">
+                    <div class="detail-type-img">
+                        <img src="./res/type-icons/psychic.svg" alt="psychic">
+                    </div>
+                    Psychic
+                </div>
+                <div class="detail-type">
+                    <div class="detail-type-img">
+                        <img src="./res/type-icons/flying.svg" alt="psychic">
+                    </div>
+                    Flying
+                </div>
+            </div>
+            <div class="details-props">
+                <div><span>Height:</span><br>5.2 m</div>
+                <div><span>Weight:</span><br>216 kg</div>
+                <div><span>Gender:</span><br>unknown</div>
+            </div>
+        </div>
+        <div class="details-panel panel-4">
+            <div class="stats-grid-item stat-hp">
+                <div class="animation-box">
+                    <svg class="stats-loaded-circle">
+                        <circle cx="50%" cy="50%" r="50%"/>
+                    </svg>
+                    <div class="stats-bg-circle"></div>
+                    <span class="stat-value">80</span>
+                </div>
+                <span class="stat-name">
+                    HP
+                </span>
+            </div>
+            <div class="stats-grid-item stat-attack">
+                <div class="animation-box">
+                    <svg class="stats-loaded-circle">
+                        <circle cx="50%" cy="50%" r="50%"/>
+                    </svg>
+                    <div class="stats-bg-circle"></div>
+                    <span class="stat-value">80</span>
+                </div>
+                <span class="stat-name">
+                    Attack
+                </span>
+            </div>
+            <div class="stats-grid-item stat-defense">
+                <div class="animation-box">
+                    <svg class="stats-loaded-circle">
+                        <circle cx="50%" cy="50%" r="50%"/>
+                    </svg>
+                    <div class="stats-bg-circle"></div>
+                    <span class="stat-value">80</span>
+                </div>
+                <span class="stat-name">
+                    Attack
+                </span>
+            </div>
+            <div class="stats-grid-item stat-sp-attack">
+                <div class="animation-box">
+                    <svg class="stats-loaded-circle">
+                        <circle cx="50%" cy="50%" r="50%"/>
+                    </svg>
+                    <div class="stats-bg-circle"></div>
+                    <span class="stat-value">80</span>
+                </div>
+                <span class="stat-name">
+                    Sp-Attack
+                </span>
+            </div>
+            <div class="stats-grid-item stat-sp-defense">
+                <div class="animation-box">
+                    <svg class="stats-loaded-circle">
+                        <circle cx="50%" cy="50%" r="50%"/>
+                    </svg>
+                    <div class="stats-bg-circle"></div>
+                    <span class="stat-value">80</span>
+                </div>
+                <span class="stat-name">
+                    Sp-Defense
+                </span>
+            </div>
+            <div class="stats-grid-item stat-init">
+                <div class="animation-box">
+                    <svg class="stats-loaded-circle">
+                        <circle cx="50%" cy="50%" r="50%"/>
+                    </svg>
+                    <div class="stats-bg-circle"></div>
+                    <span class="stat-value">80</span>
+                </div>
+                <span class="stat-name">
+                    Initiative
+                </span>
+            </div>
+        </div>
+    </div>
+    <h2>Abilities & Evolutions</h2>
+    <div class="grid-details-two">
+        <div class="details-panel panel-5">
+            <div class="abilities-content">
+                <div class="ability-one">
+                    <span>Pressure</span>
+                    <p>Increases the PP cost of moves targetting the Pokémon by one.</p>
+                </div>
+                <div class="abilities-break"></div>
+                <div class="ability-two">
+                    <span>Multiscale (hidden)</span>
+                    <p>This Pokémon takes half as much damage when it is hit having full HP.</p>
+                </div>
+            </div>
+            <div class="bg-shape-abilities"></div>
+            <img src="./res/circles-bg-2.svg">
+        </div>
+        <div class="details-panel panel-6">
+            <div class="grid-item evolution-item">
+                <div class="item-top">
+                    <span class="item-id">#001</span>
+                    <div class="img-box">
+                        <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
+                    </div>
+                    <span class="item-name">Lugia</span>
+                    <div class="item-arrow">
+                        <i class="ri-arrow-drop-right-line"></i>
+                    </div>
+                </div>
+                <div class="item-bottom"></div>
+            </div>
+            <div class="evolution-btn-box">
+                <div class="arrow-btn">
+                    <i class="ri-arrow-right-s-line"></i>
+                </div>
+            </div>
+            <div class="grid-item evolution-item">
+                <div class="item-top">
+                    <span class="item-id">#001</span>
+                    <div class="img-box">
+                        <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
+                    </div>
+                    <span class="item-name">Lugia</span>
+                    <div class="item-arrow">
+                        <i class="ri-arrow-drop-right-line"></i>
+                    </div>
+                </div>
+                <div class="item-bottom"></div>
+            </div>
+            <div class="evolution-btn-box">
+                <div class="arrow-btn">
+                    <i class="ri-arrow-right-s-line"></i>
+                </div>
+            </div>
+            <div class="grid-item evolution-item">
+                <div class="item-top">
+                    <span class="item-id">#001</span>
+                    <div class="img-box">
+                        <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
+                    </div>
+                    <span class="item-name">Lugia</span>
+                    <div class="item-arrow">
+                        <i class="ri-arrow-drop-right-line"></i>
+                    </div>
+                </div>
+                <div class="item-bottom"></div>
+            </div>
+        </div>
+    </div>
+    <h2>Special Forms</h2>
+    <div class="grid-details-two">
+        <div class="details-panel panel-7">
+            <div class="grid-item evolution-item">
+                <div class="item-top">
+                    <span class="item-id">#001</span>
+                    <div class="img-box">
+                        <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
+                    </div>
+                    <span class="item-name">Lugia</span>
+                    <div class="item-arrow">
+                        <i class="ri-arrow-drop-right-line"></i>
+                    </div>
+                </div>
+                <div class="item-bottom"></div>
+            </div>
+            <div class="grid-item evolution-item">
+                <div class="item-top">
+                    <span class="item-id">#001</span>
+                    <div class="img-box">
+                        <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
+                    </div>
+                    <span class="item-name">Lugia</span>
+                    <div class="item-arrow">
+                        <i class="ri-arrow-drop-right-line"></i>
+                    </div>
+                </div>
+                <div class="item-bottom"></div>
+            </div>
+        </div>
+    </div>
+*/
 
 
 
