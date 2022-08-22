@@ -1,24 +1,42 @@
 :root {
-    --bg-bug: #92BC2C;
-    --bg-dark: #595761;
-    --bg-dragon: #0C69C8;
-    --bg-electric: #F2D94E;
-    --bg-fairy: #EE90E6;
-    --bg-fighting: #D3425F;
-    --bg-fire: #FBA54C;
-    --bg-flying: #A1BBEC;
-    --bg-ghost: #5F6DBC;
-    --bg-grass: #5FBD58;
-    --bg-ground:#DA7C4D;
-    --bg-ice: #75D0C1;
-    --bg-normal: #A0A29F;
-    --bg-poison: #B763CF;
-    --bg-psychic: #FA8581;
-    --bg-rock: #C9BB8A;
-    --bg-steel: #5695A3;
-    --bg-water: #539DDF;
+    --bg-bug: linear-gradient(-10deg, rgb(177, 230, 34) 7%, rgba(146,188,44,1) 100%);
+    --bg-dark: linear-gradient(-10deg, rgb(127, 121, 158) 7%, rgba(89,87,97,1) 100%);
+    --bg-dragon: linear-gradient(-10deg, rgb(38, 177, 236) 7%, rgba(12,105,200,1) 100%);
+    --bg-electric: linear-gradient(-10deg, rgb(255, 224, 44) 7%, rgb(253, 199, 59) 100%);
+    --bg-fairy: linear-gradient(-10deg, rgb(239, 169, 255) 7%, rgb(227, 122, 219) 100%);
+    --bg-fighting: linear-gradient(-10deg, rgb(255, 61, 129) 7%, rgba(211,66,95,1) 100%);
+    --bg-fire: linear-gradient(-10deg, rgb(255, 189, 65) 7%, rgb(255, 139, 34) 100%);
+    --bg-flying: linear-gradient(-10deg, rgb(136, 212, 255) 7%, rgba(161,187,236,1) 100%);
+    --bg-ghost: linear-gradient(-10deg, rgb(97, 134, 255) 7%, rgba(95,109,188,1) 100%);
+    --bg-grass: linear-gradient(-10deg, rgb(123, 230, 86) 7%, rgba(95,189,88,1) 100%);
+    --bg-ground:linear-gradient(-10deg, rgb(255, 138, 108) 7%, rgba(218,124,77,1) 100%);
+    --bg-ice: linear-gradient(-10deg, rgb(107, 236, 225) 7%, rgba(117,208,193,1) 100%);
+    --bg-normal: linear-gradient(-10deg, rgba(201,205,199,1) 7%, rgba(160,162,159,1) 100%);
+    --bg-poison: linear-gradient(-10deg, rgba(185,80,237,1) 7%, rgba(183,99,207,1) 100%);
+    --bg-psychic: linear-gradient(-10deg, rgba(255,130,125,1) 7%, rgb(243, 103, 101) 100%);
+    --bg-rock: linear-gradient(-10deg, rgba(238,202,129,1) 7%, rgba(201,187,138,1) 100%);
+    --bg-steel: linear-gradient(-10deg, rgba(79,203,208,1) 7%, rgba(86,149,163,1) 100%);
+    --bg-water: linear-gradient(-10deg, rgb(51, 201, 255) 7%, rgba(83,157,223,1) 100%);
     --bg-gradient-orange-r: linear-gradient(40deg, rgba(255,39,48,1) 0%, rgb(255, 118, 33) 100%);
     --bg-gradient-orange-l: linear-gradient(340deg, rgba(255,39,48,1) 0%, rgba(255,95,32,1) 100%);
+}
+
+::-webkit-scrollbar {
+    width: 1rem;
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: .5rem;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: .5rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.25);
 }
 
 * {
@@ -75,7 +93,7 @@ header {
     background: var(--bg-gradient-orange-r);
     position: relative;
     padding: 1.5rem 0 3.5rem;
-    margin-bottom: 4rem;
+    margin-bottom: 7rem;
 }
 
 #scroll-box {
@@ -133,7 +151,6 @@ header {
     align-items: center;
     justify-content: center;
     font-size: 2rem;
-    display: none;
 }
 
 #to-top-btn {
@@ -263,6 +280,7 @@ input {
 .item-top:hover > .item-arrow {
     transform: scale(1);
 }
+
 
 .img-box {
     height: 10rem;
@@ -563,7 +581,7 @@ width: 70%;
     z-index: 3;
 }
 
-.panel-6 {
+.panel-6, .panel-7 {
     background-color: rgba(255, 255, 255, 0.1);
     display: flex;
     justify-content: space-around;
@@ -594,25 +612,54 @@ width: 70%;
 /* Filter */
 
 #settings-bar {
-    margin-top: 2rem;
     position: relative;
-    display: none;
 }
 
 #type-filter {
-    background-color: #fff;
     padding: .8rem 1rem;
     border-radius: .6rem;
+    width: 15rem;
+    cursor: pointer;
+    transition: .2s;
+}
+
+#type-filter:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+#type-filter:hover > div {
+    border-bottom-color: #fff;
+    transition: .2s;
+}
+
+#type-filter:hover > div > .filter-arrow {
+    color: #fff;
+}
+
+#type-filter:hover > div > .setting-name{
+    color: #fff;
+}
+
+.filter-arrow {
+    transition: .2s;
+}
+
+#type-filter > div {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 14rem;
-    cursor: pointer;
+    border-bottom: 1px solid #616161;
+    padding-bottom: .5rem;
+}
+
+.filter-arrow {
+    color: #616161;
 }
 
 .setting-name {
-    color: #212121;
+    color: #616161;
     font-weight: bold;
+    transition: .2s;
 }
 
 #type-dropdown {
@@ -627,8 +674,8 @@ width: 70%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 14rem;
-    height: 30rem;
+    width: 15rem;
+    height: 50vh;
     overflow: auto;
     box-shadow: 0 0 .7rem #616161;
     scrollbar-width: none;
@@ -646,18 +693,13 @@ width: 70%;
     justify-content: space-between;
     width: 100%;
     cursor: pointer;
-    margin-bottom: .5rem;
+    padding: .5rem;
+    border-radius: .5rem;
 }
 
-.type-item:hover > .type-content {
-    filter: saturate(200%);
-    transform: scale(1.04);
+.type-item:hover {
+    background-color: rgba(0, 0, 0, 0.1);
 }
-
-.type-item:last-of-type {
-    margin-bottom: 0;
-}
-
 
 .type-content {
     padding: .5rem .7rem;
@@ -689,80 +731,80 @@ width: 70%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: transparent;
+    background-color: #fff;
 }
 
 
 #bug > .type-content {
-    background-color: var(--bg-bug);
+    background: var(--bg-bug);
 }
 
 #dark > .type-content {
-    background-color: var(--bg-dark);
+    background: var(--bg-dark);
 }
 
 #dragon > .type-content {
-    background-color: var(--bg-dragon);
+    background: var(--bg-dragon);
 }
 
 #electric > .type-content {
-    background-color: var(--bg-electric);
+    background: var(--bg-electric);
 }
 
 #fairy > .type-content {
-    background-color: var(--bg-fairy);
+    background: var(--bg-fairy);
 }
 
 #fighting > .type-content {
-    background-color: var(--bg-fighting);
+    background: var(--bg-fighting);
 }
 
 #fire > .type-content {
-    background-color: var(--bg-fire);
+    background: var(--bg-fire);
 }
 
 #flying > .type-content {
-    background-color: var(--bg-flying);
+    background: var(--bg-flying);
 }
 
 #ghost > .type-content {
-    background-color: var(--bg-ghost);
+    background: var(--bg-ghost);
 }
 
 #grass > .type-content {
-    background-color: var(--bg-grass);
+    background: var(--bg-grass);
 }
 
 #ground > .type-content {
-    background-color: var(--bg-ground);
+    background: var(--bg-ground);
 }
 
 #ice > .type-content {
-    background-color: var(--bg-ice);
+    background: var(--bg-ice);
 }
 
 #normal > .type-content {
-    background-color: var(--bg-normal);
+    background: var(--bg-normal);
 }
 
 #poison > .type-content {
-    background-color: var(--bg-poison);
+    background: var(--bg-poison);
 }
 
 #psychic > .type-content {
-    background-color: var(--bg-psychic);
+    background: var(--bg-psychic);
 }
 
 #rock > .type-content {
-    background-color: var(--bg-rock);
+    background: var(--bg-rock);
 }
 
 #steel > .type-content {
-    background-color: var(--bg-steel);
+    background: var(--bg-steel);
 }
 
 #water > .type-content {
-    background-color: var(--bg-water);
+    background: var(--bg-water);
 }
 
 

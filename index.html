@@ -44,8 +44,10 @@
     <main>
         <div id="settings-bar">
             <div id="type-filter">
-                <span class="setting-name">Type Filter</span>
-                <i class="ri-arrow-down-s-line"></i>
+                <div>
+                    <span class="setting-name">Type Filter</span>
+                    <i class="ri-arrow-down-s-line filter-arrow"></i>
+                </div>
             </div>
             <div id="type-dropdown">
                 <div class="type-item" id="bug">
@@ -251,257 +253,220 @@
         <div id="alert-box"></div>
         <div id="grid-box"></div>
 
-        <div class="grid-details-one">
-            <div class="arrow-btn" id="details-back-btn">
-                <i class="ri-arrow-left-s-line"></i>
-            </div>
-            <div class="details-panel panel-1">
-                <div class="details-img-box">
-                    <img src="./res/249.png" alt="">
-                </div>
-                <img class="circle-bg" src="./res/circles-bg.svg">
-            </div>
-            <div class="panel-2">
-                <div>
-                    <span>#249</span>
-                    <h2>Lugia</h2>
-                </div>
-                <p>It is said that it quitely spends its time deep at the bottom of the sea because its powers are too strong.</p>
-            </div>
-            <div class="details-panel panel-3">
-                <div>
-                    <div class="detail-type">
-                        <div class="detail-type-img">
-                            <img src="./res/type-icons/psychic.svg" alt="psychic">
-                        </div>
-                        Psychic
-                    </div>
-                    <div class="detail-type">
-                        <div class="detail-type-img">
-                            <img src="./res/type-icons/flying.svg" alt="psychic">
-                        </div>
-                        Flying
-                    </div>
-                </div>
-                <div class="details-props">
-                    <div><span>Height:</span><br>5.2 m</div>
-                    <div><span>Weight:</span><br>216 kg</div>
-                    <div><span>Gender:</span><br>unknown</div>
-                </div>
-            </div>
-            <div class="details-panel panel-4">
-                <div class="stats-grid-item stat-hp">
-                    <div class="animation-box">
-                        <svg class="stats-loaded-circle">
-                            <circle cx="50%" cy="50%" r="50%"/>
-                        </svg>
-                        <div class="stats-bg-circle"></div>
-                        <span class="stat-value">80</span>
-                    </div>
-                    <span class="stat-name">
-                        HP
-                    </span>
-                </div>
-                <div class="stats-grid-item stat-attack">
-                    <div class="animation-box">
-                        <svg class="stats-loaded-circle">
-                            <circle cx="50%" cy="50%" r="50%"/>
-                        </svg>
-                        <div class="stats-bg-circle"></div>
-                        <span class="stat-value">80</span>
-                    </div>
-                    <span class="stat-name">
-                        Attack
-                    </span>
-                </div>
-                <div class="stats-grid-item stat-defense">
-                    <div class="animation-box">
-                        <svg class="stats-loaded-circle">
-                            <circle cx="50%" cy="50%" r="50%"/>
-                        </svg>
-                        <div class="stats-bg-circle"></div>
-                        <span class="stat-value">80</span>
-                    </div>
-                    <span class="stat-name">
-                        Attack
-                    </span>
-                </div>
-                <div class="stats-grid-item stat-sp-attack">
-                    <div class="animation-box">
-                        <svg class="stats-loaded-circle">
-                            <circle cx="50%" cy="50%" r="50%"/>
-                        </svg>
-                        <div class="stats-bg-circle"></div>
-                        <span class="stat-value">80</span>
-                    </div>
-                    <span class="stat-name">
-                        Sp-Attack
-                    </span>
-                </div>
-                <div class="stats-grid-item stat-sp-defense">
-                    <div class="animation-box">
-                        <svg class="stats-loaded-circle">
-                            <circle cx="50%" cy="50%" r="50%"/>
-                        </svg>
-                        <div class="stats-bg-circle"></div>
-                        <span class="stat-value">80</span>
-                    </div>
-                    <span class="stat-name">
-                        Sp-Defense
-                    </span>
-                </div>
-                <div class="stats-grid-item stat-init">
-                    <div class="animation-box">
-                        <svg class="stats-loaded-circle">
-                            <circle cx="50%" cy="50%" r="50%"/>
-                        </svg>
-                        <div class="stats-bg-circle"></div>
-                        <span class="stat-value">80</span>
-                    </div>
-                    <span class="stat-name">
-                        Initiative
-                    </span>
-                </div>
-            </div>
-        </div>
-        <h2>Abilities & Evolutions</h2>
-        <div class="grid-details-two">
-            <div class="details-panel panel-5">
-                <div class="abilities-content">
-                    <div class="ability-one">
-                        <span>Pressure</span>
-                        <p>Increases the PP cost of moves targetting the Pokémon by one.</p>
-                    </div>
-                    <div class="abilities-break"></div>
-                    <div class="ability-two">
-                        <span>Multiscale (hidden)</span>
-                        <p>This Pokémon takes half as much damage when it is hit having full HP.</p>
-                    </div>
-                </div>
-                <div class="bg-shape-abilities"></div>
-                <img src="./res/circles-bg-2.svg">
-            </div>
-            <div class="details-panel panel-6">
-                <div class="grid-item evolution-item">
-                    <div class="item-top">
-                        <span class="item-id">#001</span>
-                        <div class="img-box">
-                            <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
-                        </div>
-                        <span class="item-name">Lugia</span>
-                        <div class="item-arrow">
-                            <i class="ri-arrow-drop-right-line"></i>
-                        </div>
-                    </div>
-                    <div class="item-bottom"></div>
-                </div>
-                <div class="evolution-btn-box">
-                    <div class="arrow-btn">
-                        <i class="ri-arrow-right-s-line"></i>
-                    </div>
-                </div>
-                <div class="grid-item evolution-item">
-                    <div class="item-top">
-                        <span class="item-id">#001</span>
-                        <div class="img-box">
-                            <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
-                        </div>
-                        <span class="item-name">Lugia</span>
-                        <div class="item-arrow">
-                            <i class="ri-arrow-drop-right-line"></i>
-                        </div>
-                    </div>
-                    <div class="item-bottom"></div>
-                </div>
-                <div class="evolution-btn-box">
-                    <div class="arrow-btn">
-                        <i class="ri-arrow-right-s-line"></i>
-                    </div>
-                </div>
-                <div class="grid-item evolution-item">
-                    <div class="item-top">
-                        <span class="item-id">#001</span>
-                        <div class="img-box">
-                            <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
-                        </div>
-                        <span class="item-name">Lugia</span>
-                        <div class="item-arrow">
-                            <i class="ri-arrow-drop-right-line"></i>
-                        </div>
-                    </div>
-                    <div class="item-bottom"></div>
-                </div>
-            </div>
-        </div>
-        <h2>Special Forms</h2>
-        <div class="grid-details-two">
-            <div class="details-panel panel-5">
-                <div class="abilities-content">
-                    <div class="ability-one">
-                        <span>Pressure</span>
-                        <p>Increases the PP cost of moves targetting the Pokémon by one.</p>
-                    </div>
-                    <div class="abilities-break"></div>
-                    <div class="ability-two">
-                        <span>Multiscale (hidden)</span>
-                        <p>This Pokémon takes half as much damage when it is hit having full HP.</p>
-                    </div>
-                </div>
-                <div class="bg-shape-abilities"></div>
-                <img src="./res/circles-bg-2.svg">
-            </div>
-            <div class="details-panel panel-6">
-                <div class="grid-item evolution-item">
-                    <div class="item-top">
-                        <span class="item-id">#001</span>
-                        <div class="img-box">
-                            <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
-                        </div>
-                        <span class="item-name">Lugia</span>
-                        <div class="item-arrow">
-                            <i class="ri-arrow-drop-right-line"></i>
-                        </div>
-                    </div>
-                    <div class="item-bottom"></div>
-                </div>
-                <div class="evolution-btn-box">
-                    <div class="arrow-btn">
-                        <i class="ri-arrow-right-s-line"></i>
-                    </div>
-                </div>
-                <div class="grid-item evolution-item">
-                    <div class="item-top">
-                        <span class="item-id">#001</span>
-                        <div class="img-box">
-                            <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
-                        </div>
-                        <span class="item-name">Lugia</span>
-                        <div class="item-arrow">
-                            <i class="ri-arrow-drop-right-line"></i>
-                        </div>
-                    </div>
-                    <div class="item-bottom"></div>
-                </div>
-                <div class="evolution-btn-box">
-                    <div class="arrow-btn">
-                        <i class="ri-arrow-right-s-line"></i>
-                    </div>
-                </div>
-                <div class="grid-item evolution-item">
-                    <div class="item-top">
-                        <span class="item-id">#001</span>
-                        <div class="img-box">
-                            <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
-                        </div>
-                        <span class="item-name">Lugia</span>
-                        <div class="item-arrow">
-                            <i class="ri-arrow-drop-right-line"></i>
-                        </div>
-                    </div>
-                    <div class="item-bottom"></div>
-                </div>
-            </div>
-        </div>
+<!--Details Page-->
+<!--        <div class="grid-details-one">-->
+<!--            <div class="arrow-btn" id="details-back-btn">-->
+<!--                <i class="ri-arrow-left-s-line"></i>-->
+<!--            </div>-->
+<!--            <div class="details-panel panel-1">-->
+<!--                <div class="details-img-box">-->
+<!--                    <img src="./res/249.png" alt="">-->
+<!--                </div>-->
+<!--                <img class="circle-bg" src="./res/circles-bg.svg">-->
+<!--            </div>-->
+<!--            <div class="panel-2">-->
+<!--                <div>-->
+<!--                    <span>#249</span>-->
+<!--                    <h2>Lugia</h2>-->
+<!--                </div>-->
+<!--                <p>It is said that it quitely spends its time deep at the bottom of the sea because its powers are too strong.</p>-->
+<!--            </div>-->
+<!--            <div class="details-panel panel-3">-->
+<!--                <div>-->
+<!--                    <div class="detail-type">-->
+<!--                        <div class="detail-type-img">-->
+<!--                            <img src="./res/type-icons/psychic.svg" alt="psychic">-->
+<!--                        </div>-->
+<!--                        Psychic-->
+<!--                    </div>-->
+<!--                    <div class="detail-type">-->
+<!--                        <div class="detail-type-img">-->
+<!--                            <img src="./res/type-icons/flying.svg" alt="psychic">-->
+<!--                        </div>-->
+<!--                        Flying-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="details-props">-->
+<!--                    <div><span>Height:</span><br>5.2 m</div>-->
+<!--                    <div><span>Weight:</span><br>216 kg</div>-->
+<!--                    <div><span>Gender:</span><br>unknown</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="details-panel panel-4">-->
+<!--                <div class="stats-grid-item stat-hp">-->
+<!--                    <div class="animation-box">-->
+<!--                        <svg class="stats-loaded-circle">-->
+<!--                            <circle cx="50%" cy="50%" r="50%"/>-->
+<!--                        </svg>-->
+<!--                        <div class="stats-bg-circle"></div>-->
+<!--                        <span class="stat-value">80</span>-->
+<!--                    </div>-->
+<!--                    <span class="stat-name">-->
+<!--                        HP-->
+<!--                    </span>-->
+<!--                </div>-->
+<!--                <div class="stats-grid-item stat-attack">-->
+<!--                    <div class="animation-box">-->
+<!--                        <svg class="stats-loaded-circle">-->
+<!--                            <circle cx="50%" cy="50%" r="50%"/>-->
+<!--                        </svg>-->
+<!--                        <div class="stats-bg-circle"></div>-->
+<!--                        <span class="stat-value">80</span>-->
+<!--                    </div>-->
+<!--                    <span class="stat-name">-->
+<!--                        Attack-->
+<!--                    </span>-->
+<!--                </div>-->
+<!--                <div class="stats-grid-item stat-defense">-->
+<!--                    <div class="animation-box">-->
+<!--                        <svg class="stats-loaded-circle">-->
+<!--                            <circle cx="50%" cy="50%" r="50%"/>-->
+<!--                        </svg>-->
+<!--                        <div class="stats-bg-circle"></div>-->
+<!--                        <span class="stat-value">80</span>-->
+<!--                    </div>-->
+<!--                    <span class="stat-name">-->
+<!--                        Attack-->
+<!--                    </span>-->
+<!--                </div>-->
+<!--                <div class="stats-grid-item stat-sp-attack">-->
+<!--                    <div class="animation-box">-->
+<!--                        <svg class="stats-loaded-circle">-->
+<!--                            <circle cx="50%" cy="50%" r="50%"/>-->
+<!--                        </svg>-->
+<!--                        <div class="stats-bg-circle"></div>-->
+<!--                        <span class="stat-value">80</span>-->
+<!--                    </div>-->
+<!--                    <span class="stat-name">-->
+<!--                        Sp-Attack-->
+<!--                    </span>-->
+<!--                </div>-->
+<!--                <div class="stats-grid-item stat-sp-defense">-->
+<!--                    <div class="animation-box">-->
+<!--                        <svg class="stats-loaded-circle">-->
+<!--                            <circle cx="50%" cy="50%" r="50%"/>-->
+<!--                        </svg>-->
+<!--                        <div class="stats-bg-circle"></div>-->
+<!--                        <span class="stat-value">80</span>-->
+<!--                    </div>-->
+<!--                    <span class="stat-name">-->
+<!--                        Sp-Defense-->
+<!--                    </span>-->
+<!--                </div>-->
+<!--                <div class="stats-grid-item stat-init">-->
+<!--                    <div class="animation-box">-->
+<!--                        <svg class="stats-loaded-circle">-->
+<!--                            <circle cx="50%" cy="50%" r="50%"/>-->
+<!--                        </svg>-->
+<!--                        <div class="stats-bg-circle"></div>-->
+<!--                        <span class="stat-value">80</span>-->
+<!--                    </div>-->
+<!--                    <span class="stat-name">-->
+<!--                        Initiative-->
+<!--                    </span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <h2>Abilities & Evolutions</h2>-->
+<!--        <div class="grid-details-two">-->
+<!--            <div class="details-panel panel-5">-->
+<!--                <div class="abilities-content">-->
+<!--                    <div class="ability-one">-->
+<!--                        <span>Pressure</span>-->
+<!--                        <p>Increases the PP cost of moves targetting the Pokémon by one.</p>-->
+<!--                    </div>-->
+<!--                    <div class="abilities-break"></div>-->
+<!--                    <div class="ability-two">-->
+<!--                        <span>Multiscale (hidden)</span>-->
+<!--                        <p>This Pokémon takes half as much damage when it is hit having full HP.</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="bg-shape-abilities"></div>-->
+<!--                <img src="./res/circles-bg-2.svg">-->
+<!--            </div>-->
+<!--            <div class="details-panel panel-6">-->
+<!--                <div class="grid-item evolution-item">-->
+<!--                    <div class="item-top">-->
+<!--                        <span class="item-id">#001</span>-->
+<!--                        <div class="img-box">-->
+<!--                            <img src="./res/249-sprite.png" alt="Lugia" class="item-img">-->
+<!--                        </div>-->
+<!--                        <span class="item-name">Lugia</span>-->
+<!--                        <div class="item-arrow">-->
+<!--                            <i class="ri-arrow-drop-right-line"></i>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="item-bottom"></div>-->
+<!--                </div>-->
+<!--                <div class="evolution-btn-box">-->
+<!--                    <div class="arrow-btn">-->
+<!--                        <i class="ri-arrow-right-s-line"></i>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="grid-item evolution-item">-->
+<!--                    <div class="item-top">-->
+<!--                        <span class="item-id">#001</span>-->
+<!--                        <div class="img-box">-->
+<!--                            <img src="./res/249-sprite.png" alt="Lugia" class="item-img">-->
+<!--                        </div>-->
+<!--                        <span class="item-name">Lugia</span>-->
+<!--                        <div class="item-arrow">-->
+<!--                            <i class="ri-arrow-drop-right-line"></i>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="item-bottom"></div>-->
+<!--                </div>-->
+<!--                <div class="evolution-btn-box">-->
+<!--                    <div class="arrow-btn">-->
+<!--                        <i class="ri-arrow-right-s-line"></i>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="grid-item evolution-item">-->
+<!--                    <div class="item-top">-->
+<!--                        <span class="item-id">#001</span>-->
+<!--                        <div class="img-box">-->
+<!--                            <img src="./res/249-sprite.png" alt="Lugia" class="item-img">-->
+<!--                        </div>-->
+<!--                        <span class="item-name">Lugia</span>-->
+<!--                        <div class="item-arrow">-->
+<!--                            <i class="ri-arrow-drop-right-line"></i>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="item-bottom"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <h2>Special Forms</h2>-->
+<!--        <div class="grid-details-two">-->
+<!--            <div class="details-panel panel-7">-->
+<!--                <div class="grid-item evolution-item">-->
+<!--                    <div class="item-top">-->
+<!--                        <span class="item-id">#001</span>-->
+<!--                        <div class="img-box">-->
+<!--                            <img src="./res/249-sprite.png" alt="Lugia" class="item-img">-->
+<!--                        </div>-->
+<!--                        <span class="item-name">Lugia</span>-->
+<!--                        <div class="item-arrow">-->
+<!--                            <i class="ri-arrow-drop-right-line"></i>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="item-bottom"></div>-->
+<!--                </div>-->
+<!--                <div class="grid-item evolution-item">-->
+<!--                    <div class="item-top">-->
+<!--                        <span class="item-id">#001</span>-->
+<!--                        <div class="img-box">-->
+<!--                            <img src="./res/249-sprite.png" alt="Lugia" class="item-img">-->
+<!--                        </div>-->
+<!--                        <span class="item-name">Lugia</span>-->
+<!--                        <div class="item-arrow">-->
+<!--                            <i class="ri-arrow-drop-right-line"></i>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="item-bottom"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
     </main>
 </body>
 </html>

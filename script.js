@@ -4,14 +4,14 @@ let nationalDex = [];
 let displayedItems;
 
 // Initial Page Load
-// window.addEventListener("load", async () => {
-//     alertBox.innerHTML = "Loading Pokédex...";
-//     nationalDex = await getNationalDex();
-//     await displayPokemon(nationalDex);
-//     alertBox.style.display = "none";
-//     alertBox.innerHTML = "";
-//     displayedItems = nationalDex.slice();
-// });
+window.addEventListener("load", async () => {
+    alertBox.innerHTML = "Loading Pokédex...";
+    nationalDex = await getNationalDex();
+    await displayPokemon(nationalDex);
+    alertBox.style.display = "none";
+    alertBox.innerHTML = "";
+    displayedItems = nationalDex.slice();
+});
 
 async function getNationalDex() {
     try {
@@ -130,7 +130,7 @@ typeFilterBtn.addEventListener("click", showTypeDropdown);
 
 function showTypeDropdown() {
     const dropdown = document.querySelector("#type-dropdown");
-    const arrow = typeFilterBtn.children[1];
+    const arrow = document.querySelector(".filter-arrow");
     if (!dropdownIsVisible) {
         dropdownIsVisible = true;
         dropdown.style.visibility = "visible";
@@ -157,7 +157,7 @@ typeItems.forEach(item => item.addEventListener("click", e => {
     } else {
         const index = activeTypeFilter.indexOf(filterName);
         activeTypeFilter.splice(index, 1);
-        checkbox.style.backgroundColor = "transparent";
+        checkbox.style.backgroundColor = "#ffffff";
         checkbox.style.borderColor = "#a4a4a4"
         removeTypeFilter();
     }
