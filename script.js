@@ -8,6 +8,7 @@ window.addEventListener("load", async () => {
     alertBox.innerHTML = "Loading Pokédex...";
     nationalDex = await getNationalDex();
     await displayPokemon(nationalDex);
+    addClickEvents();
     alertBox.style.display = "none";
     alertBox.innerHTML = "";
     displayedItems = nationalDex.slice();
@@ -181,6 +182,14 @@ async function removeTypeFilter() {
     }
 }
 
+// Detail Pages
+
+function addClickEvents() {
+    const gridItems = document.querySelectorAll(".item-top");
+    gridItems.forEach(gridItem => gridItem.addEventListener("click", e => {
+
+    }));
+}
 
 
 
