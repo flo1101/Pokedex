@@ -1,4 +1,3 @@
-const gridBox = document.querySelector("#grid-box");
 const alertBox = document.querySelector("#alert-box");
 const main = document.querySelector("main");
 const settingsBar = document.querySelector("#settings-bar")
@@ -56,9 +55,10 @@ function createPokemon(data) {
 
 
 function displayPokemon(pokemon) {
+    const gridBox = document.querySelector("#grid-box");
     let html = "";
-    for (const mon of pokemon) {
-        html += createItemHtml(mon);
+    for (const singlePokemon of pokemon) {
+        html += createItemHtml(singlePokemon);
     }
     gridBox.innerHTML = html;
     addDetailPageClickEvents();
@@ -149,7 +149,7 @@ form.addEventListener("submit", async e => {
 
 function searchPokemon() {
     const value = input.value.toLowerCase();
-    const filtered = displayedItems
+    filtered = displayedItems
         .filter(pokemon => pokemon.name.includes(value));
     displayPokemon(filtered);
 }
@@ -430,6 +430,7 @@ function addBackBtn() {
         main.innerHTML = mainHtml;
         addDetailPageClickEvents();
         displayedItems = nationalDex;
+        document.querySelector("#search-input").value = "";
     })
 }
 
