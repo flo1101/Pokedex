@@ -104,6 +104,15 @@ function firstLetterUppercase(str) {
 
 
 // Fetch Pokemon
+async function fetchData(url) {
+    try {
+        const res = await fetch(url);
+        return await res.json();
+    } catch (e) {
+        console.log("ERROR: ", e);
+    }
+}
+
 async function fetchPokemon(input) {
     try {
         const url = `https://pokeapi.co/api/v2/pokemon/`;
@@ -221,7 +230,7 @@ async function displayDetailPage(pokemon) {
     const pokemonData = await fetchPokemon(pokemon);
     const speciesData = await fetchSpecies(pokemon);
     main.innerHTML =
-        `<div class="grid-details-one">
+           `<div class="grid-details-one">
                 <div class="arrow-btn" id="details-back-btn">
                     <i class="ri-arrow-left-s-line"></i>
                 </div>
@@ -314,13 +323,13 @@ async function displayDetailPage(pokemon) {
                 <div class="details-panel panel-5">
                     <div class="abilities-content">
                         <div class="ability-one">
-                            <span>Pressure</span>
-                            <p>Increases the PP cost of moves targetting the Pokémon by one.</p>
+                            <span class="ability-one-name"></span>
+                            <p class="ability-one-text"></p>
                         </div>
                         <div class="abilities-break"></div>
                         <div class="ability-two">
-                            <span>Multiscale (hidden)</span>
-                            <p>This Pokémon takes half as much damage when it is hit having full HP.</p>
+                            <span class="ability-two-name"></span>
+                            <p class="ability-two-text"></p>
                         </div>
                     </div>
                     <div class="bg-shape-abilities"></div>
@@ -412,7 +421,7 @@ async function displayDetailPage(pokemon) {
     addValuesDetailPage(pokemonData, speciesData);
 }
 
-function addValuesDetailPage(pokemonData, speciesData) {
+async function addValuesDetailPage(pokemonData, speciesData) {
     const id = getDisplayableID(pokemonData.id);
     const name = firstLetterUppercase(pokemonData.name);
     const img = pokemonData.sprites.other["official-artwork"].front_default;
@@ -434,6 +443,16 @@ function addValuesDetailPage(pokemonData, speciesData) {
     const spDef = pokemonData.stats[4].base_stat;
     const init = pokemonData.stats[5].base_stat;
     setStats(hp, att, def, spAtt, spDef, init);
+
+    const nameOne = firstLetterUppercase(pokemonData.abilities[0].ability.name);
+    const urlOne = pokemonData.abilities[0].ability.url;
+    const abilityOne = await fetchData(urlOne);
+    const textOne = abilityOne.effect_entries.filter(entry => entry.language.name === "en")[0].short_effect;
+    const nameTwo = firstLetterUppercase(pokemonData.abilities[1].ability.name);
+    const urlTwo = pokemonData.abilities[1].ability.url;
+    const abilityTwo = await fetchData(urlTwo);
+    const textTwo = abilityTwo.effect_entries.filter(entry => entry.language.name === "en")[0].short_effect;
+    setAbilities(nameOne, textOne, nameTwo, textTwo);
 }
 
 function getFlavorText(speciesData) {
@@ -484,6 +503,13 @@ function setStats(hp, att, def, spAtt, spDef, init) {
     document.querySelector(".details-sp-att-circle").style.strokeDashoffset = 301 - spAtt;
     document.querySelector(".details-sp-def-circle").style.strokeDashoffset = 301 - spDef;
     document.querySelector(".details-init-circle").style.strokeDashoffset = 301 - init;
+}
+
+function setAbilities(name1, text1, name2, text2) {
+    document.querySelector(".ability-one-name").textContent = name1;
+    document.querySelector(".ability-one-text").textContent = text1;
+    document.querySelector(".ability-two-name").textContent = name2;
+    document.querySelector(".ability-two-text").textContent = text2;
 }
 
 /*
