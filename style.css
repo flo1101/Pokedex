@@ -605,6 +605,7 @@ width: 70%;
 
 #settings-bar {
     position: relative;
+    display: block;
 }
 
 #type-filter {
@@ -613,6 +614,7 @@ width: 70%;
     width: 15rem;
     cursor: pointer;
     transition: .2s;
+    margin: 0 auto;
 }
 
 #type-filter:hover {

@@ -1,6 +1,7 @@
 const gridBox = document.querySelector("#grid-box");
 const alertBox = document.querySelector("#alert-box");
 const main = document.querySelector("main");
+const settingsBar = document.querySelector("#settings-bar")
 let mainHtml = localStorage["mainHtml"];
 let nationalDex;
 let displayedItems;
@@ -8,7 +9,6 @@ let displayedItems;
 // Initial Page Load
 window.addEventListener("load", async () => {
     if(mainHtml === undefined) {
-        console.log("first load")
         alertBox.innerHTML = "Loading Pokédex...";
         nationalDex = await getNationalDex();
         await displayPokemon(nationalDex);
@@ -229,6 +229,7 @@ function addDetailPageClickEvents() {
 async function displayDetailPage(pokemon) {
     const pokemonData = await fetchPokemon(pokemon);
     const speciesData = await fetchSpecies(pokemon);
+    settingsBar.style.display = "none";
     main.innerHTML =
            `<div class="grid-details-one">
                 <div class="arrow-btn" id="details-back-btn">
@@ -419,6 +420,17 @@ async function displayDetailPage(pokemon) {
                 </div>
             </div>`;
     addValuesDetailPage(pokemonData, speciesData);
+    addBackBtn();
+    window.scrollTo(0, 0);
+}
+
+function addBackBtn() {
+    document.querySelector("#details-back-btn").addEventListener("click", () => {
+        settingsBar.style.display = "block";
+        main.innerHTML = mainHtml;
+        addDetailPageClickEvents();
+        displayedItems = nationalDex;
+    })
 }
 
 async function addValuesDetailPage(pokemonData, speciesData) {
@@ -448,11 +460,12 @@ async function addValuesDetailPage(pokemonData, speciesData) {
     const urlOne = pokemonData.abilities[0].ability.url;
     const abilityOne = await fetchData(urlOne);
     const textOne = abilityOne.effect_entries.filter(entry => entry.language.name === "en")[0].short_effect;
+    setAbilityOne(nameOne, textOne);
     const nameTwo = firstLetterUppercase(pokemonData.abilities[1].ability.name);
     const urlTwo = pokemonData.abilities[1].ability.url;
     const abilityTwo = await fetchData(urlTwo);
     const textTwo = abilityTwo.effect_entries.filter(entry => entry.language.name === "en")[0].short_effect;
-    setAbilities(nameOne, textOne, nameTwo, textTwo);
+    setAbilityTwo(nameTwo, textTwo);
 }
 
 function getFlavorText(speciesData) {
@@ -505,9 +518,12 @@ function setStats(hp, att, def, spAtt, spDef, init) {
     document.querySelector(".details-init-circle").style.strokeDashoffset = 301 - init;
 }
 
-function setAbilities(name1, text1, name2, text2) {
+function setAbilityOne(name1, text1) {
     document.querySelector(".ability-one-name").textContent = name1;
     document.querySelector(".ability-one-text").textContent = text1;
+}
+
+function setAbilityTwo(name2, text2) {
     document.querySelector(".ability-two-name").textContent = name2;
     document.querySelector(".ability-two-text").textContent = text2;
 }
