@@ -1,17 +1,28 @@
 const gridBox = document.querySelector("#grid-box");
 const alertBox = document.querySelector("#alert-box");
 const main = document.querySelector("main");
-let nationalDex = [];
+let mainHtml = localStorage["mainHtml"];
+let nationalDex;
 let displayedItems;
 
 // Initial Page Load
 window.addEventListener("load", async () => {
-    alertBox.innerHTML = "Loading Pokédex...";
-    nationalDex = await getNationalDex();
-    await displayPokemon(nationalDex);
-    alertBox.style.display = "none";
-    alertBox.innerHTML = "";
-    displayedItems = nationalDex.slice();
+    if(mainHtml === undefined) {
+        console.log("first load")
+        alertBox.innerHTML = "Loading Pokédex...";
+        nationalDex = await getNationalDex();
+        await displayPokemon(nationalDex);
+        alertBox.style.display = "none";
+        alertBox.innerHTML = "";
+        displayedItems = nationalDex.slice();
+        localStorage["mainHtml"] = main.innerHTML;
+        localStorage["nationalDex"] = JSON.stringify(nationalDex);
+    } else {
+        main.innerHTML = mainHtml;
+        addDetailPageClickEvents();
+        nationalDex = JSON.parse(localStorage["nationalDex"]);
+        displayedItems = nationalDex.slice();
+    }
 });
 
 async function getNationalDex() {
