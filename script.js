@@ -157,13 +157,15 @@ async function fetchSpecies(input) {
 const form = document.querySelector("#search-box");
 const input = document.querySelector("#search-input");
 
-form.addEventListener("keyup", searchPokemon)
+form.addEventListener("keyup", e => {
+    if (e.keyCode === 13) return;
+    searchPokemon
+})
 form.addEventListener("submit", async e => {
     e.preventDefault();
     const value = input.value.toLowerCase();
     if (!nationalDex.map(pokemon => pokemon.name).includes(value)) return;
     await displayDetailPage(value);
-
 });
 
 function searchPokemon() {
@@ -234,6 +236,7 @@ async function removeTypeFilter() {
         activeTypeFilter.forEach(filterName => applyTypeFilter(filterName))
     }
 }
+
 
 // Detail Pages
 
@@ -396,9 +399,10 @@ async function displayDetailPage(pokemon) {
 function addBackBtn() {
     document.querySelector("#details-back-btn").addEventListener("click", () => {
         settingsBar.style.display = "flex";
-        main.innerHTML = mainHtml;
-        addDetailPageClickEvents();
         displayedItems = nationalDex;
+        main.innerHTML = mainHtml;
+        activeTypeFilter.forEach(filter => applyTypeFilter(filter));
+        addDetailPageClickEvents();
         document.querySelector("#search-input").value = "";
     })
 }
@@ -431,11 +435,14 @@ async function addValuesDetailPage(pokemonData, speciesData) {
     const abilityOne = await fetchData(urlOne);
     const textOne = abilityOne.effect_entries.filter(entry => entry.language.name === "en")[0].short_effect;
     setAbilityOne(nameOne, textOne);
-    const nameTwo = firstLetterUppercase(pokemonData.abilities[1].ability.name);
-    const urlTwo = pokemonData.abilities[1].ability.url;
-    const abilityTwo = await fetchData(urlTwo);
-    const textTwo = abilityTwo.effect_entries.filter(entry => entry.language.name === "en")[0].short_effect;
-    setAbilityTwo(nameTwo, textTwo);
+    if (pokemonData.abilities.length > 1) {
+        document.querySelector(".abilities-break").style.display = "block";
+        const nameTwo = firstLetterUppercase(pokemonData.abilities[1].ability.name);
+        const urlTwo = pokemonData.abilities[1].ability.url;
+        const abilityTwo = await fetchData(urlTwo);
+        const textTwo = abilityTwo.effect_entries.filter(entry => entry.language.name === "en")[0].short_effect;
+        setAbilityTwo(nameTwo, textTwo);
+    }
     await setEvolutions(speciesData);
 }
 
@@ -458,6 +465,7 @@ async function setEvolutions(speciesData) {
     }
     const evoBox = document.querySelector(".panel-6");
     evoBox.innerHTML = html;
+    addDetailPageClickEvents();
 }
 
 function getEvoChain(evoData) {
@@ -483,7 +491,7 @@ async function getEvoItemHtml(pokemonName) {
 }
 
 function getFlavorText(speciesData) {
-    let text = speciesData.flavor_text_entries[0].flavor_text;
+    let text = speciesData.flavor_text_entries.filter(entry => entry.language.name === "en")[0].flavor_text;
     return text.replaceAll("\n"," ").replaceAll("\f", " ");
 }
 

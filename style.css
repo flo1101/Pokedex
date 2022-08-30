@@ -546,6 +546,7 @@ width: 70%;
     height: 2px;
     background-color: #dedede;
     margin: 2rem 0;
+    display: none;
 }
 
 .panel-5 > img {
@@ -671,7 +672,7 @@ width: 70%;
     flex-direction: column;
     justify-content: space-between;
     width: 15rem;
-    height: 50vh;
+    height: 40vh;
     overflow: auto;
     box-shadow: 0 0 .7rem #616161;
     scrollbar-width: none;
