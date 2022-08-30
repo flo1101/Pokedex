@@ -84,6 +84,25 @@ function createItemHtml(pokemon) {
             </div>`
 }
 
+function createEvoItemHtml(pokemon) {
+    const name = firstLetterUppercase(pokemon.name);
+    const id = getDisplayableID(pokemon.id);
+    const sprite = pokemon.sprite;
+    return `<div class="grid-item evolution-item">
+                <div class="item-top">
+                    <span class="item-id">${id}</span>
+                    <div class="img-box">
+                        <img src="${sprite}" alt="${name}" class="item-img">
+                    </div>
+                    <span class="item-name">${name}</span>
+                    <div class="item-arrow">
+                        <i class="ri-arrow-drop-right-line"></i>
+                    </div>
+                </div>
+                <div class="item-bottom"></div>
+            </div>`
+}
+
 function getDisplayableID(num) {
     let id = "#";
     for(let i = num.toString().length; i < 3; i++) {
@@ -336,57 +355,7 @@ async function displayDetailPage(pokemon) {
                     <div class="bg-shape-abilities"></div>
                     <img src="./res/circles-bg-2.svg">
                 </div>
-                <div class="details-panel panel-6">
-                    <div class="grid-item evolution-item">
-                        <div class="item-top">
-                            <span class="item-id">#001</span>
-                            <div class="img-box">
-                                <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
-                            </div>
-                            <span class="item-name">Lugia</span>
-                            <div class="item-arrow">
-                                <i class="ri-arrow-drop-right-line"></i>
-                            </div>
-                        </div>
-                        <div class="item-bottom"></div>
-                    </div>
-                    <div class="evolution-btn-box">
-                        <div class="arrow-btn">
-                            <i class="ri-arrow-right-s-line"></i>
-                        </div>
-                    </div>
-                    <div class="grid-item evolution-item">
-                        <div class="item-top">
-                            <span class="item-id">#001</span>
-                            <div class="img-box">
-                                <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
-                            </div>
-                            <span class="item-name">Lugia</span>
-                            <div class="item-arrow">
-                                <i class="ri-arrow-drop-right-line"></i>
-                            </div>
-                        </div>
-                        <div class="item-bottom"></div>
-                    </div>
-                    <div class="evolution-btn-box">
-                        <div class="arrow-btn">
-                            <i class="ri-arrow-right-s-line"></i>
-                        </div>
-                    </div>
-                    <div class="grid-item evolution-item">
-                        <div class="item-top">
-                            <span class="item-id">#001</span>
-                            <div class="img-box">
-                                <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
-                            </div>
-                            <span class="item-name">Lugia</span>
-                            <div class="item-arrow">
-                                <i class="ri-arrow-drop-right-line"></i>
-                            </div>
-                        </div>
-                        <div class="item-bottom"></div>
-                    </div>
-                </div>
+                <div class="details-panel panel-6"></div>
             </div>
             <h2>Special Forms</h2>
             <div class="grid-details-two">
@@ -426,7 +395,7 @@ async function displayDetailPage(pokemon) {
 
 function addBackBtn() {
     document.querySelector("#details-back-btn").addEventListener("click", () => {
-        settingsBar.style.display = "block";
+        settingsBar.style.display = "flex";
         main.innerHTML = mainHtml;
         addDetailPageClickEvents();
         displayedItems = nationalDex;
@@ -467,6 +436,50 @@ async function addValuesDetailPage(pokemonData, speciesData) {
     const abilityTwo = await fetchData(urlTwo);
     const textTwo = abilityTwo.effect_entries.filter(entry => entry.language.name === "en")[0].short_effect;
     setAbilityTwo(nameTwo, textTwo);
+    await setEvolutions(speciesData);
+}
+
+async function setEvolutions(speciesData) {
+    let html = ``;
+    const evoData = await fetchData(speciesData.evolution_chain.url)
+    const evoChain = getEvoChain(evoData.chain);
+    html += await getEvoItemHtml(evoChain[0][0]);
+    if (evoChain.length > 1) {
+        for(let i = 1; i < evoChain.length; i++) {
+            html += `<div class="evolution-btn-box">
+                        <div class="arrow-btn">
+                            <i class="ri-arrow-right-s-line"></i>
+                        </div>
+                    </div>`;
+            for (const pokemonName of evoChain[i]) {
+                html += await getEvoItemHtml(pokemonName);
+            }
+        }
+    }
+    const evoBox = document.querySelector(".panel-6");
+    evoBox.innerHTML = html;
+}
+
+function getEvoChain(evoData) {
+    let evoChain = [];
+    do {
+        let numberOfEvolutions = evoData.evolves_to.length;
+        evoChain.push([evoData.species.name]);
+        if (numberOfEvolutions > 1) {
+            let currEvos = [];
+            evoData.evolves_to.forEach(evo => currEvos.push(evo.species.name));
+            evoChain.push(currEvos);
+            evoData = evoData.evolves_to[0];
+        }
+        evoData = evoData.evolves_to[0];
+    } while(evoData !== undefined && evoData.hasOwnProperty("evolves_to"));
+    return evoChain;
+}
+
+async function getEvoItemHtml(pokemonName) {
+    const data = await fetchPokemon(pokemonName);
+    const pokemon = createPokemon(data);
+    return createEvoItemHtml(pokemon);
 }
 
 function getFlavorText(speciesData) {

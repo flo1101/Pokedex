@@ -159,6 +159,7 @@ header {
     position: fixed;
     bottom: 2rem;
     right: 2.5rem;
+    z-index: 5;
 }
 
 .arrow-btn {
@@ -605,7 +606,8 @@ width: 70%;
 
 #settings-bar {
     position: relative;
-    display: block;
+    display: flex;
+    justify-content: center;
 }
 
 #type-filter {
@@ -614,7 +616,6 @@ width: 70%;
     width: 15rem;
     cursor: pointer;
     transition: .2s;
-    margin: 0 auto;
 }
 
 #type-filter:hover {
@@ -658,7 +659,8 @@ width: 70%;
 
 #type-dropdown {
     position: absolute;
-    margin-top: .5rem;
+    top: 4rem;
+    margin: .5rem;
     background-color: #fff;
     border: .8rem solid #fff;
     border-left: none;
