@@ -15,6 +15,7 @@ window.addEventListener("load", async () => {
         alertBox.innerHTML = "";
         displayedItems = nationalDex.slice();
         localStorage["mainHtml"] = main.innerHTML;
+        mainHtml = main.innerHTML;
         localStorage["nationalDex"] = JSON.stringify(nationalDex);
     } else {
         main.innerHTML = mainHtml;
@@ -159,7 +160,7 @@ const input = document.querySelector("#search-input");
 
 form.addEventListener("keyup", e => {
     if (e.keyCode === 13) return;
-    searchPokemon
+    searchPokemon();
 })
 form.addEventListener("submit", async e => {
     e.preventDefault();
@@ -249,8 +250,9 @@ function addDetailPageClickEvents() {
 }
 
 async function displayDetailPage(pokemon) {
+    console.log(pokemon)
     const pokemonData = await fetchPokemon(pokemon);
-    const speciesData = await fetchSpecies(pokemon);
+    const speciesData = await fetchData(pokemonData.species.url);
     settingsBar.style.display = "none";
     main.innerHTML =
            `<div class="grid-details-one">
