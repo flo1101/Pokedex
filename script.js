@@ -408,20 +408,23 @@ function addBackBtn() {
 }
 
 async function addValuesDetailPage(pokemonData, speciesData) {
-    const id = getDisplayableID(pokemonData.id);
-    const name = firstLetterUppercase(pokemonData.name);
-    const img = pokemonData.sprites.other["official-artwork"].front_default;
-    const description = getFlavorText(speciesData);
-    setNameImgDescID(name, img, description, id);
+    addNameImgDescID(pokemonData, speciesData);
+    addTypes(pokemonData);
+    addProps(pokemonData);
+    addStats(pokemonData);
+    await addAbilityOne(pokemonData);
+    await addAbilityTwo(pokemonData);
+    await setEvolutions(speciesData);
+}
 
-    const types = pokemonData.types.map(type => type.type.name);
-    setTypes(types);
-
+function addProps(pokemonData) {
     const heightMtr = pokemonData.height / 10;
     const weightKg = pokemonData.weight / 10;
     const gender = "";
     setProps(heightMtr, weightKg, gender);
+}
 
+function addStats(pokemonData) {
     const hp = pokemonData.stats[0].base_stat;
     const att = pokemonData.stats[1].base_stat;
     const def = pokemonData.stats[2].base_stat;
@@ -429,21 +432,32 @@ async function addValuesDetailPage(pokemonData, speciesData) {
     const spDef = pokemonData.stats[4].base_stat;
     const init = pokemonData.stats[5].base_stat;
     setStats(hp, att, def, spAtt, spDef, init);
+}
 
+async function addAbilityOne(pokemonData) {
     const nameOne = firstLetterUppercase(pokemonData.abilities[0].ability.name);
     const urlOne = pokemonData.abilities[0].ability.url;
     const abilityOne = await fetchData(urlOne);
     const textOne = abilityOne.effect_entries.filter(entry => entry.language.name === "en")[0].short_effect;
     setAbilityOne(nameOne, textOne);
-    if (pokemonData.abilities.length > 1) {
-        document.querySelector(".abilities-break").style.display = "block";
-        const nameTwo = firstLetterUppercase(pokemonData.abilities[1].ability.name);
-        const urlTwo = pokemonData.abilities[1].ability.url;
-        const abilityTwo = await fetchData(urlTwo);
-        const textTwo = abilityTwo.effect_entries.filter(entry => entry.language.name === "en")[0].short_effect;
-        setAbilityTwo(nameTwo, textTwo);
-    }
-    await setEvolutions(speciesData);
+}
+
+async function addAbilityTwo(pokemonData) {
+    if (pokemonData.abilities.length <= 1) return;
+    document.querySelector(".abilities-break").style.display = "block";
+    const nameTwo = firstLetterUppercase(pokemonData.abilities[1].ability.name);
+    const urlTwo = pokemonData.abilities[1].ability.url;
+    const abilityTwo = await fetchData(urlTwo);
+    const textTwo = abilityTwo.effect_entries.filter(entry => entry.language.name === "en")[0].short_effect;
+    setAbilityTwo(nameTwo, textTwo);
+}
+
+function addNameImgDescID(pokemonData, speciesData) {
+    const id = getDisplayableID(pokemonData.id);
+    const name = firstLetterUppercase(pokemonData.name);
+    const img = pokemonData.sprites.other["official-artwork"].front_default;
+    const description = getFlavorText(speciesData);
+    setNameImgDescID(name, img, description, id);
 }
 
 async function setEvolutions(speciesData) {
@@ -503,7 +517,8 @@ function setNameImgDescID(name, img, description, id) {
     document.querySelector(".details-id").innerHTML = id;
 }
 
-function setTypes(types) {
+function addTypes(pokemonData) {
+    const types = pokemonData.types.map(type => type.type.name);
     const detailsTypes = document.querySelector(".details-types");
     types.forEach(type => {
         const iconPath = `./res/type-icons/${type}.svg`
