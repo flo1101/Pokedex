@@ -185,9 +185,11 @@ typeItems.forEach(item => item.addEventListener("click", e => {
 }));
 
 async function applyTypeFilter(filterName) {
+
     const filtered = displayedItems
-        .filter(pokemon => pokemon.types.includes(filterName));
+        .filter(pokemon => pokemon.pokemonData.types.map(type => type.type.name).includes(filterName));
     displayPokemon(filtered);
+    addDetailPageLinks("item-top");
     displayedItems = filtered.slice();
 }
 
