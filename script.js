@@ -1,3 +1,5 @@
+const body = document.querySelector("body");
+const main = document.querySelector("main");
 const form = document.querySelector("#search-box");
 const input = document.querySelector("#search-input");
 const settingsBar = document.querySelector("#settings-bar")
