@@ -6,6 +6,7 @@ const gridBox = document.querySelector("#grid-box");
 const detailBox = document.querySelector("#detail-box");
 
 let nationalDex = [];
+let specialForms = [];
 let displayedItems;
 
 
@@ -75,6 +76,23 @@ function createEvoItemHtml(pokemon) {
     return `<div class="grid-item evolution-item">
                 <div class="item-top">
                     <span class="item-id">${id}</span>
+                    <div class="img-box">
+                        <img src="${sprite}" alt="${name}" class="item-img">
+                    </div>
+                    <span class="item-name">${name}</span>
+                    <div class="item-arrow">
+                        <i class="ri-arrow-drop-right-line"></i>
+                    </div>
+                </div>
+                <div class="item-bottom"></div>
+            </div>`
+}
+
+function createFormItemHtml(form) {
+    const name = firstLetterUppercase(form.name);
+    const sprite = form.pokemonData.sprites.front_default;
+    return `<div class="grid-item evolution-item">
+                <div class="item-top form-item-top">
                     <div class="img-box">
                         <img src="${sprite}" alt="${name}" class="item-img">
                     </div>
@@ -242,7 +260,7 @@ async function displayDetailPage(pokemonName) {
                     <div class="details-props">
                         <div><span class="details-prop-name">Height:</span><br><span class="details-height"></span></div>
                         <div><span class="details-prop-name">Weight:</span><br><span class="details-weight"></span></div>
-                        <div><span class="details-prop-name">Gender:</span><br><span class="details-gender"></span></div>
+                        <div><span class="details-prop-name">Group:</span><br><span class="details-group"></span></div>
                     </div>
                 </div>
                 <div class="details-panel panel-4">
@@ -325,39 +343,17 @@ async function displayDetailPage(pokemonName) {
                     <div class="bg-shape-abilities"></div>
                     <img src="./res/circles-bg-2.svg">
                 </div>
-                <div class="details-panel panel-6"></div>
+                <div class="details-panel panel-6">
+                    <span class="no-evos-text">This Pokémon doesn't evolve.</span>
+                </div>
             </div>
             <h2>Special Forms</h2>
-            <div class="grid-details-two">
+            <div class="grid-details-three">
                 <div class="details-panel panel-7">
-                    <div class="grid-item evolution-item">
-                        <div class="item-top">
-                            <span class="item-id">#001</span>
-                            <div class="img-box">
-                                <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
-                            </div>
-                            <span class="item-name">Lugia</span>
-                            <div class="item-arrow">
-                                <i class="ri-arrow-drop-right-line"></i>
-                            </div>
-                        </div>
-                        <div class="item-bottom"></div>
-                    </div>
-                    <div class="grid-item evolution-item">
-                        <div class="item-top">
-                            <span class="item-id">#001</span>
-                            <div class="img-box">
-                                <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
-                            </div>
-                            <span class="item-name">Lugia</span>
-                            <div class="item-arrow">
-                                <i class="ri-arrow-drop-right-line"></i>
-                            </div>
-                        </div>
-                        <div class="item-bottom"></div>
-                    </div>
+                    <span class="no-forms-text">This Pokémon has no special forms.</span>
                 </div>
             </div>`;
+
     addValuesDetailPage(pokemon);
     detailBox.style.display = "flex";
     window.scrollTo(0, 0);
@@ -384,7 +380,8 @@ async function addValuesDetailPage(pokemon) {
     addStats(pokemon);
     await addAbilityOne(pokemon);
     await addAbilityTwo(pokemon);
-    await setEvolutions(pokemon);
+    await addEvolutions(pokemon);
+    addSpecialForms(pokemon);
 }
 
 function addNameImgDescID(pokemon) {
@@ -416,8 +413,13 @@ function addProps(pokemon) {
     pokemonData = pokemon.pokemonData;
     const heightMtr = pokemonData.height / 10;
     const weightKg = pokemonData.weight / 10;
-    const gender = "";
-    setProps(heightMtr, weightKg, gender);
+    let group = "Generic";
+    if (pokemon.speciesData.is_legendary === true) {
+        group = "Legendary";
+    } else if (pokemon.speciesData.is_mythical === true) {
+        group = "Mythical";
+    }
+    setProps(heightMtr, weightKg, group);
 }
 
 function addStats(pokemon) {
@@ -451,12 +453,16 @@ async function addAbilityTwo(pokemon) {
     setAbilityTwo(nameTwo, textTwo);
 }
 
-
-async function setEvolutions(pokemon) {
+async function addEvolutions(pokemon) {
     speciesData = pokemon.speciesData;
-    let html = ``;
     const evoData = await fetchData(speciesData.evolution_chain.url)
     const evoChain = getEvoChain(evoData.chain);
+    if (evoChain.length === 1 && evoChain[0].evolves_to === undefined) {
+        document.querySelector(".no-evos-text").style.display = "block";
+        return;
+    }
+    let html = "";
+    document.querySelector(".no-evos-text").style.display = "none";
     html += await getEvoItemHtml(evoChain[0][0]);
     if (evoChain.length > 1) {
         for(let i = 1; i < evoChain.length; i++) {
@@ -474,6 +480,40 @@ async function setEvolutions(pokemon) {
     evoBox.innerHTML = html;
     addDetailPageLinks("item-top");
 }
+
+async function addSpecialForms(pokemon) {
+    speciesData = pokemon.speciesData;
+    if (speciesData.varieties.length === 1) {
+        document.querySelector(".no-forms-text").style.display = "block";
+        return;
+    }
+    document.querySelector(".no-forms-text").style.display = "none";
+    let html = "";
+    const forms = speciesData.varieties.filter(e => e.is_default === false);
+    for (const form of forms) {
+        const pokemonData = await fetchData(form.pokemon.url)
+        let newForm = {
+            "name": form.pokemon.name,
+            "pokemonData": pokemonData,
+            "speciesData": null
+        }
+        specialForms.push(newForm);
+        html += createFormItemHtml(newForm)
+    }
+    document.querySelector(".panel-7").innerHTML = html;
+    addFormPageLinks("form-item-top");
+}
+
+async function addFormPageLinks(className) {
+    const items = document.querySelectorAll(`.${className}`);
+    items.forEach(gridItem => gridItem.addEventListener("click", async e => {
+        const pokemonName = e.currentTarget.querySelector(".item-name").textContent.toLowerCase();
+        const pokemon = specialForms.find(form => form.name === pokemonName);
+        const imgURL = pokemon.pokemonData.sprites.other["official-artwork"].front_default;
+        console.log(imgURL)
+    }));
+}
+
 
 function getEvoChain(evoData) {
     let evoChain = [];
@@ -509,10 +549,10 @@ function setNameImgDescID(name, img, description, id) {
     document.querySelector(".details-id").innerHTML = id;
 }
 
-function setProps(height, weight, gender) {
+function setProps(height, weight, group) {
     document.querySelector(".details-height").innerHTML = height + " m";
     document.querySelector(".details-weight").innerHTML = weight + " kg";
-    document.querySelector(".details-gender").innerHTML = gender;
+    document.querySelector(".details-group").innerHTML = group;
 }
 
 function setStats(hp, att, def, spAtt, spDef, init) {
