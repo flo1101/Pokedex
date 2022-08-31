@@ -1,75 +1,58 @@
-const alertBox = document.querySelector("#alert-box");
-const main = document.querySelector("main");
+const form = document.querySelector("#search-box");
+const input = document.querySelector("#search-input");
 const settingsBar = document.querySelector("#settings-bar")
-let mainHtml = localStorage["mainHtml"];
-let nationalDex;
+const alertBox = document.querySelector("#alert-box");
+const gridBox = document.querySelector("#grid-box");
+const detailBox = document.querySelector("#detail-box");
+
+let nationalDex = [];
 let displayedItems;
+
 
 // Initial Page Load
 window.addEventListener("load", async () => {
-    if(mainHtml === undefined) {
-        alertBox.innerHTML = "Loading Pokédex...";
-        nationalDex = await getNationalDex();
-        await displayPokemon(nationalDex);
-        alertBox.style.display = "none";
-        alertBox.innerHTML = "";
-        displayedItems = nationalDex.slice();
-        localStorage["mainHtml"] = main.innerHTML;
-        mainHtml = main.innerHTML;
-        localStorage["nationalDex"] = JSON.stringify(nationalDex);
-    } else {
-        main.innerHTML = mainHtml;
-        addDetailPageClickEvents();
-        nationalDex = JSON.parse(localStorage["nationalDex"]);
-        displayedItems = nationalDex.slice();
+    alertBox.innerHTML = "Loading Pokédex...";
+    await fillNationalDex();
+    displayPokemon(nationalDex);
+    alertBox.style.display = "none";
+    displayedItems = nationalDex.slice();
+    addDetailPageLinks("item-top");
     }
-});
+);
 
-async function getNationalDex() {
+async function fillNationalDex() {
     try {
         const res = await fetch("https://pokeapi.co/api/v2/pokedex/1");
         const data = await res.json();
-        return convertFetchedEntries(data.pokemon_entries);
+        for (const entry of data.pokemon_entries) {
+            const pokemonRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${entry.entry_number}`);
+            const pokemonData = await pokemonRes.json();
+            let pokemon = {
+                "id": entry.entry_number,
+                "name": entry.pokemon_species.name,
+                "pokemonData": pokemonData,
+                "speciesData": null
+            }
+            nationalDex.push(pokemon);
+        }
     } catch (e) {
         console.log("ERROR: ", e);
     }
 }
 
-async function convertFetchedEntries(entries) {
-    const convertedDex = [];
-    for (const entry of entries) {
-        const data = await fetchPokemon(entry.entry_number);
-        const pokemon = createPokemon(data);
-        convertedDex.push(pokemon);
-    }
-    return convertedDex;
-}
-
-function createPokemon(data) {
-    const pokemon = {};
-    pokemon["id"] = data.id;
-    pokemon["name"] = data.name;
-    pokemon["sprite"] = data.sprites["front_default"];
-    pokemon["types"] = data.types.map(type => type.type.name);
-    return pokemon
-}
-
-
 function displayPokemon(pokemon) {
-    const gridBox = document.querySelector("#grid-box");
     let html = "";
     for (const singlePokemon of pokemon) {
         html += createItemHtml(singlePokemon);
     }
     gridBox.innerHTML = html;
-    addDetailPageClickEvents();
 }
 
 
 function createItemHtml(pokemon) {
     const name = firstLetterUppercase(pokemon.name);
     const id = getDisplayableID(pokemon.id);
-    const sprite = pokemon.sprite;
+    const sprite = pokemon.pokemonData.sprites.front_default;
     return `<div class="grid-item">
                 <div class="item-top">
                     <span class="item-id">${id}</span>
@@ -88,7 +71,7 @@ function createItemHtml(pokemon) {
 function createEvoItemHtml(pokemon) {
     const name = firstLetterUppercase(pokemon.name);
     const id = getDisplayableID(pokemon.id);
-    const sprite = pokemon.sprite;
+    const sprite = pokemon.pokemonData.sprites.front_default;
     return `<div class="grid-item evolution-item">
                 <div class="item-top">
                     <span class="item-id">${id}</span>
@@ -123,7 +106,7 @@ function firstLetterUppercase(str) {
 }
 
 
-// Fetch Pokemon
+// Fetch
 async function fetchData(url) {
     try {
         const res = await fetch(url);
@@ -133,35 +116,15 @@ async function fetchData(url) {
     }
 }
 
-async function fetchPokemon(input) {
-    try {
-        const url = `https://pokeapi.co/api/v2/pokemon/`;
-        const res = await fetch(url + input);
-        return await res.json();
-    } catch (e) {
-        console.log("ERROR: ", e);
-    }
-}
-
-async function fetchSpecies(input) {
-    try {
-        const url = `https://pokeapi.co/api/v2/pokemon-species/`;
-        const res = await fetch(url + input);
-        return await res.json();
-    } catch (e) {
-        console.log("ERROR: ", e);
-    }
-}
-
 
 // Search Pokemon
-const form = document.querySelector("#search-box");
-const input = document.querySelector("#search-input");
 
 form.addEventListener("keyup", e => {
     if (e.keyCode === 13) return;
     searchPokemon();
+    addDetailPageLinks("item-top");
 })
+
 form.addEventListener("submit", async e => {
     e.preventDefault();
     const value = input.value.toLowerCase();
@@ -241,20 +204,20 @@ async function removeTypeFilter() {
 
 // Detail Pages
 
-function addDetailPageClickEvents() {
-    const gridItems = document.querySelectorAll(".item-top");
-    gridItems.forEach(gridItem => gridItem.addEventListener("click", async e => {
-        const pokemon = e.currentTarget.querySelector(".item-name").textContent.toLowerCase();
-        await displayDetailPage(pokemon);
+function addDetailPageLinks(className) {
+    const items = document.querySelectorAll(`.${className}`);
+    items.forEach(gridItem => gridItem.addEventListener("click", async e => {
+        const pokemonName = e.currentTarget.querySelector(".item-name").textContent.toLowerCase();
+        await displayDetailPage(pokemonName);
     }));
 }
 
-async function displayDetailPage(pokemon) {
-    console.log(pokemon)
-    const pokemonData = await fetchPokemon(pokemon);
-    const speciesData = await fetchData(pokemonData.species.url);
+async function displayDetailPage(pokemonName) {
+    if (nationalDex.find(e => e.name === pokemonName).speciesData === null) await addSpeciesData(pokemonName);
+    let pokemon = nationalDex.find(e => e.name === pokemonName);
     settingsBar.style.display = "none";
-    main.innerHTML =
+    gridBox.style.display = "none";
+    detailBox.innerHTML =
            `<div class="grid-details-one">
                 <div class="arrow-btn" id="details-back-btn">
                     <i class="ri-arrow-left-s-line"></i>
@@ -393,40 +356,70 @@ async function displayDetailPage(pokemon) {
                     </div>
                 </div>
             </div>`;
-    addValuesDetailPage(pokemonData, speciesData);
-    addBackBtn();
+    addValuesDetailPage(pokemon);
+    detailBox.style.display = "flex";
     window.scrollTo(0, 0);
+    addBackBtnEvent();
 }
 
-function addBackBtn() {
+async function addSpeciesData(pokemonName) {
+    const speciesData = await fetchData(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`);
+    nationalDex.find(e => e.name === pokemonName)["speciesData"] = speciesData;
+}
+
+function addBackBtnEvent() {
     document.querySelector("#details-back-btn").addEventListener("click", () => {
+        detailBox.style.display = "none";
         settingsBar.style.display = "flex";
-        displayedItems = nationalDex;
-        main.innerHTML = mainHtml;
-        activeTypeFilter.forEach(filter => applyTypeFilter(filter));
-        addDetailPageClickEvents();
-        document.querySelector("#search-input").value = "";
+        gridBox.style.display = "grid";
     })
 }
 
-async function addValuesDetailPage(pokemonData, speciesData) {
-    addNameImgDescID(pokemonData, speciesData);
-    addTypes(pokemonData);
-    addProps(pokemonData);
-    addStats(pokemonData);
-    await addAbilityOne(pokemonData);
-    await addAbilityTwo(pokemonData);
-    await setEvolutions(speciesData);
+async function addValuesDetailPage(pokemon) {
+    addNameImgDescID(pokemon);
+    addTypes(pokemon);
+    addProps(pokemon);
+    addStats(pokemon);
+    await addAbilityOne(pokemon);
+    await addAbilityTwo(pokemon);
+    await setEvolutions(pokemon);
 }
 
-function addProps(pokemonData) {
+function addNameImgDescID(pokemon) {
+    const id = getDisplayableID(pokemon.id);
+    const name = firstLetterUppercase(pokemon.name);
+    const img = pokemon.pokemonData.sprites.other["official-artwork"].front_default;
+    const description = getFlavorText(pokemon.speciesData);
+    setNameImgDescID(name, img, description, id);
+}
+
+function addTypes(pokemon) {
+    const types = pokemon.pokemonData.types.map(type => type.type.name);
+    const detailsTypes = document.querySelector(".details-types");
+    types.forEach(type => {
+        const iconPath = `./res/type-icons/${type}.svg`
+        const typeName = firstLetterUppercase(type);
+        const typeDiv = document.createElement("div");
+        typeDiv.classList.add("detail-type");
+        typeDiv.style.background = `var(--bg-${type})`;
+        typeDiv.innerHTML = `<div class="detail-type-img">
+                                <img src="${iconPath}" alt="${typeName}">
+                        </div>
+                        ${typeName}`
+        detailsTypes.appendChild(typeDiv);
+    });
+}
+
+function addProps(pokemon) {
+    pokemonData = pokemon.pokemonData;
     const heightMtr = pokemonData.height / 10;
     const weightKg = pokemonData.weight / 10;
     const gender = "";
     setProps(heightMtr, weightKg, gender);
 }
 
-function addStats(pokemonData) {
+function addStats(pokemon) {
+    pokemonData = pokemon.pokemonData;
     const hp = pokemonData.stats[0].base_stat;
     const att = pokemonData.stats[1].base_stat;
     const def = pokemonData.stats[2].base_stat;
@@ -436,7 +429,8 @@ function addStats(pokemonData) {
     setStats(hp, att, def, spAtt, spDef, init);
 }
 
-async function addAbilityOne(pokemonData) {
+async function addAbilityOne(pokemon) {
+    pokemonData = pokemon.pokemonData;
     const nameOne = firstLetterUppercase(pokemonData.abilities[0].ability.name);
     const urlOne = pokemonData.abilities[0].ability.url;
     const abilityOne = await fetchData(urlOne);
@@ -444,7 +438,8 @@ async function addAbilityOne(pokemonData) {
     setAbilityOne(nameOne, textOne);
 }
 
-async function addAbilityTwo(pokemonData) {
+async function addAbilityTwo(pokemon) {
+    pokemonData = pokemon.pokemonData;
     if (pokemonData.abilities.length <= 1) return;
     document.querySelector(".abilities-break").style.display = "block";
     const nameTwo = firstLetterUppercase(pokemonData.abilities[1].ability.name);
@@ -454,15 +449,9 @@ async function addAbilityTwo(pokemonData) {
     setAbilityTwo(nameTwo, textTwo);
 }
 
-function addNameImgDescID(pokemonData, speciesData) {
-    const id = getDisplayableID(pokemonData.id);
-    const name = firstLetterUppercase(pokemonData.name);
-    const img = pokemonData.sprites.other["official-artwork"].front_default;
-    const description = getFlavorText(speciesData);
-    setNameImgDescID(name, img, description, id);
-}
 
-async function setEvolutions(speciesData) {
+async function setEvolutions(pokemon) {
+    speciesData = pokemon.speciesData;
     let html = ``;
     const evoData = await fetchData(speciesData.evolution_chain.url)
     const evoChain = getEvoChain(evoData.chain);
@@ -481,7 +470,7 @@ async function setEvolutions(speciesData) {
     }
     const evoBox = document.querySelector(".panel-6");
     evoBox.innerHTML = html;
-    addDetailPageClickEvents();
+    addDetailPageLinks("item-top");
 }
 
 function getEvoChain(evoData) {
@@ -501,8 +490,7 @@ function getEvoChain(evoData) {
 }
 
 async function getEvoItemHtml(pokemonName) {
-    const data = await fetchPokemon(pokemonName);
-    const pokemon = createPokemon(data);
+    let pokemon = nationalDex.find(e => e.name === pokemonName);
     return createEvoItemHtml(pokemon);
 }
 
@@ -517,23 +505,6 @@ function setNameImgDescID(name, img, description, id) {
     document.querySelector(".details-img").setAttribute("src", img);
     document.querySelector(".details-img").setAttribute("alt", name);
     document.querySelector(".details-id").innerHTML = id;
-}
-
-function addTypes(pokemonData) {
-    const types = pokemonData.types.map(type => type.type.name);
-    const detailsTypes = document.querySelector(".details-types");
-    types.forEach(type => {
-        const iconPath = `./res/type-icons/${type}.svg`
-        const typeName = firstLetterUppercase(type);
-        const typeDiv = document.createElement("div");
-        typeDiv.classList.add("detail-type");
-        typeDiv.style.background = `var(--bg-${type})`;
-        typeDiv.innerHTML = `<div class="detail-type-img">
-                                <img src="${iconPath}" alt="${typeName}">
-                        </div>
-                        ${typeName}`
-        detailsTypes.appendChild(typeDiv);
-    });
 }
 
 function setProps(height, weight, gender) {
