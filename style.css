@@ -291,7 +291,7 @@ input {
     height: 15rem;
 }
 
-.item-top {
+.item-top, .form-item-top {
     width: 100%;
     height: 100%;
     position: relative;
@@ -321,7 +321,7 @@ input {
     transition-timing-function: ease-in-out;
 }
 
-.grid-item:hover > .item-top {
+.grid-item:hover > .item-top, .grid-item:hover > .form-item-top {
     transform: translate(0.25rem, -0.25rem);
 }
 
@@ -330,7 +330,7 @@ input {
     transform: translate(-0.25rem, 0.25rem);
 }
 
-.item-top:hover > .item-arrow {
+.item-top:hover > .item-arrow, .form-item-top:hover > .item-arrow {
     transform: scale(1);
 }
 

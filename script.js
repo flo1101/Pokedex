@@ -4,6 +4,7 @@ const settingsBar = document.querySelector("#settings-bar")
 const alertBox = document.querySelector("#alert-box");
 const gridBox = document.querySelector("#grid-box");
 const detailBox = document.querySelector("#detail-box");
+const overlayBox = document.querySelector("#overlay-box");
 
 let nationalDex = [];
 let specialForms = [];
@@ -18,6 +19,7 @@ window.addEventListener("load", async () => {
     alertBox.style.display = "none";
     displayedItems = nationalDex.slice();
     addDetailPageLinks("item-top");
+    addOverlayBackBtnFunction();
     }
 );
 
@@ -92,7 +94,7 @@ function createFormItemHtml(form) {
     const name = firstLetterUppercase(form.name);
     const sprite = form.pokemonData.sprites.front_default;
     return `<div class="grid-item evolution-item">
-                <div class="item-top form-item-top">
+                <div class="form-item-top">
                     <div class="img-box">
                         <img src="${sprite}" alt="${name}" class="item-img">
                     </div>
@@ -510,8 +512,19 @@ async function addFormPageLinks(className) {
         const pokemonName = e.currentTarget.querySelector(".item-name").textContent.toLowerCase();
         const pokemon = specialForms.find(form => form.name === pokemonName);
         const imgURL = pokemon.pokemonData.sprites.other["official-artwork"].front_default;
-        console.log(imgURL)
+        const name = firstLetterUppercase(pokemon.name);
+        document.querySelector(".overlay-title").textContent = name;
+        const img = document.querySelector(".overlay-img");
+        img.setAttribute("src", imgURL);
+        img.setAttribute("alt", name);
+        overlayBox.style.display = "flex";
     }));
+}
+
+function addOverlayBackBtnFunction() {
+    document.querySelector(".overlay-back-btn").addEventListener("click", () => {
+        overlayBox.style.display = "none";
+    })
 }
 
 
