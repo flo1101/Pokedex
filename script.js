@@ -2,7 +2,7 @@ const body = document.querySelector("body");
 const main = document.querySelector("main");
 const form = document.querySelector("#search-box");
 const input = document.querySelector("#search-input");
-const settingsBar = document.querySelector("#settings-bar")
+const settingsBar = document.querySelector("#filter-bar")
 const alertBox = document.querySelector("#alert-box");
 const gridBox = document.querySelector("#grid-box");
 const detailBox = document.querySelector("#detail-box");
@@ -257,9 +257,6 @@ async function displayDetailPage(pokemonName) {
     gridBox.style.display = "none";
     detailBox.innerHTML =
            `<div class="grid-details-one">
-                <div class="arrow-btn" id="details-back-btn">
-                    <i class="ri-arrow-left-s-line"></i>
-                </div>
                 <div class="details-panel panel-1">
                     <div class="details-img-box">
                         <img class="details-img" src="" alt="">

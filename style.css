@@ -437,12 +437,73 @@ input {
     padding: 0 1rem;
 }
 
-#details-back-btn {
-    position: absolute;
-    top: -5rem;
-    left: 0;
-    right: 2rem;
+.settings-bar, .prev-pokemon, .next-pokemon {
+    display: flex;
+    align-items: center;
 }
+
+.settings-bar {
+    width: 100%;
+    height: 3rem;
+    margin-bottom: 7rem;
+    border-radius: 1.5rem;
+    overflow: hidden;
+}
+
+.settings-bar > div {
+    height: 100%;
+    background-color: #545454;
+    border-radius: .3rem;
+    transition: .2s;
+}
+
+.settings-bar > div:hover {
+    background-color: #545454;
+    cursor: pointer;
+}
+
+.settings-bar > div > i {
+    transform: scale(2);
+}
+
+.prev-pokemon {
+    width: 100%;
+}
+
+.prev-pokemon > * {
+    margin-left: 1.2rem;
+}
+
+.next-pokemon {
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.next-pokemon > * {
+    margin-right: 1.2rem;
+}
+
+#details-back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 .5rem;
+    white-space: nowrap;
+    padding: 0 1.5rem;
+}
+
+/*
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background-color: rgb(67, 67, 67);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .2s;
+    font-size: 2rem;*/
+
 
 .grid-details-one {
     margin-top: 3rem;
@@ -723,7 +784,7 @@ width: 70%;
 
 /* Filter */
 
-#settings-bar {
+#filter-bar {
     position: relative;
     display: flex;
     justify-content: center;
