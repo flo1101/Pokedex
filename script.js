@@ -76,12 +76,13 @@ function createItemHtml(pokemon) {
 function createEvoItemHtml(pokemon) {
     const name = firstLetterUppercase(pokemon.name);
     const id = getDisplayableID(pokemon.id);
-    const sprite = pokemon.pokemonData.sprites.front_default;
+    let spriteURL = pokemon.pokemonData.sprites.front_default;
+    spriteURL = spriteURL === null ? "./res/no-img.svg" : spriteURL;
     return `<div class="grid-item evolution-item">
                 <div class="item-top">
                     <span class="item-id">${id}</span>
                     <div class="img-box">
-                        <img src="${sprite}" alt="${name}" class="item-img">
+                        <img class="item-img" src="${spriteURL}" alt="${name}">
                     </div>
                     <span class="item-name">${name}</span>
                     <div class="item-arrow">
@@ -92,13 +93,14 @@ function createEvoItemHtml(pokemon) {
             </div>`
 }
 
-function createFormItemHtml(form) {
+async function createFormItemHtml(form) {
     const name = firstLetterUppercase(form.name);
-    const sprite = form.pokemonData.sprites.front_default;
+    let spriteURL = form.pokemonData.sprites.front_default;
+    spriteURL = spriteURL === null ? "./res/no-img.svg" : spriteURL;
     return `<div class="grid-item evolution-item">
                 <div class="form-item-top">
                     <div class="img-box">
-                        <img src="${sprite}" alt="${name}" class="item-img">
+                        <img class="item-img" src="${spriteURL}" alt="${name}">
                     </div>
                     <span class="item-name">${name}</span>
                     <div class="item-arrow">
@@ -379,8 +381,12 @@ async function displayDetailPage(pokemonName) {
 }
 
 async function addSpeciesData(pokemonName) {
-    const speciesData = await fetchData(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`);
-    nationalDex.find(e => e.name === pokemonName)["speciesData"] = speciesData;
+    try {
+        const speciesData = await fetchData(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`);
+        nationalDex.find(e => e.name === pokemonName)["speciesData"] = speciesData;
+    } catch (e) {
+        console.log("ERROR: ", e)
+    }
 }
 
 function addBackBtnEvent() {
@@ -456,7 +462,12 @@ async function addAbilityOne(pokemon) {
     const nameOne = firstLetterUppercase(pokemonData.abilities[0].ability.name);
     const urlOne = pokemonData.abilities[0].ability.url;
     const abilityOne = await fetchData(urlOne);
-    const textOne = abilityOne.effect_entries.filter(entry => entry.language.name === "en")[0].short_effect;
+    let textOne;
+    try {
+        textOne = abilityOne.effect_entries.filter(entry => entry.language.name === "en")[0].short_effect;
+    } catch (e) {
+        textOne = abilityOne.flavor_text_entries.filter(entry => entry.language.name === "en")[0].flavor_text;
+    }
     setAbilityOne(nameOne, textOne);
 }
 
@@ -485,7 +496,7 @@ async function addEvolutions(pokemon) {
     if (evoChain.length > 1) {
         for(let i = 1; i < evoChain.length; i++) {
             html += `<div class="evolution-btn-box">
-                        <div class="arrow-btn">
+                        <div class="evo-arrow">
                             <i class="ri-arrow-right-s-line"></i>
                         </div>
                     </div>`;
@@ -516,7 +527,7 @@ async function addSpecialForms(pokemon) {
             "speciesData": null
         }
         specialForms.push(newForm);
-        html += createFormItemHtml(newForm)
+        html += await createFormItemHtml(newForm)
     }
     document.querySelector(".panel-7").innerHTML = html;
     addFormPageLinks("form-item-top");
@@ -527,8 +538,9 @@ async function addFormPageLinks(className) {
     items.forEach(gridItem => gridItem.addEventListener("click", async e => {
         const pokemonName = e.currentTarget.querySelector(".item-name").textContent.toLowerCase();
         const pokemon = specialForms.find(form => form.name === pokemonName);
-        const imgURL = pokemon.pokemonData.sprites.other["official-artwork"].front_default;
         const name = firstLetterUppercase(pokemon.name);
+        let imgURL = pokemon.pokemonData.sprites.other["official-artwork"].front_default;
+        imgURL = imgURL === null ? "./res/no-img.svg" : imgURL;
         document.querySelector(".overlay-title").textContent = name;
         const img = document.querySelector(".overlay-img");
         img.setAttribute("src", imgURL);
@@ -608,223 +620,3 @@ function setAbilityTwo(name2, text2) {
     document.querySelector(".ability-two-name").textContent = name2;
     document.querySelector(".ability-two-text").textContent = text2;
 }
-
-/*
-    <div class="grid-details-one">
-        <div class="arrow-btn" id="details-back-btn">
-            <i class="ri-arrow-left-s-line"></i>
-        </div>
-        <div class="details-panel panel-1">
-            <div class="details-img-box">
-                <img src="./res/249.png" alt="">
-            </div>
-            <img class="circle-bg" src="./res/circles-bg.svg">
-        </div>
-        <div class="panel-2">
-            <div>
-                <span>#249</span>
-                <h2>Lugia</h2>
-            </div>
-            <p>It is said that it quitely spends its time deep at the bottom of the sea because its powers are too strong.</p>
-        </div>
-        <div class="details-panel panel-3">
-            <div>
-                <div class="detail-type">
-                    <div class="detail-type-img">
-                        <img src="./res/type-icons/psychic.svg" alt="psychic">
-                    </div>
-                    Psychic
-                </div>
-                <div class="detail-type">
-                    <div class="detail-type-img">
-                        <img src="./res/type-icons/flying.svg" alt="psychic">
-                    </div>
-                    Flying
-                </div>
-            </div>
-            <div class="details-props">
-                <div><span>Height:</span><br>5.2 m</div>
-                <div><span>Weight:</span><br>216 kg</div>
-                <div><span>Gender:</span><br>unknown</div>
-            </div>
-        </div>
-        <div class="details-panel panel-4">
-            <div class="stats-grid-item stat-hp">
-                <div class="animation-box">
-                    <svg class="stats-loaded-circle">
-                        <circle cx="50%" cy="50%" r="50%"/>
-                    </svg>
-                    <div class="stats-bg-circle"></div>
-                    <span class="stat-value">80</span>
-                </div>
-                <span class="stat-name">
-                    HP
-                </span>
-            </div>
-            <div class="stats-grid-item stat-attack">
-                <div class="animation-box">
-                    <svg class="stats-loaded-circle">
-                        <circle cx="50%" cy="50%" r="50%"/>
-                    </svg>
-                    <div class="stats-bg-circle"></div>
-                    <span class="stat-value">80</span>
-                </div>
-                <span class="stat-name">
-                    Attack
-                </span>
-            </div>
-            <div class="stats-grid-item stat-defense">
-                <div class="animation-box">
-                    <svg class="stats-loaded-circle">
-                        <circle cx="50%" cy="50%" r="50%"/>
-                    </svg>
-                    <div class="stats-bg-circle"></div>
-                    <span class="stat-value">80</span>
-                </div>
-                <span class="stat-name">
-                    Attack
-                </span>
-            </div>
-            <div class="stats-grid-item stat-sp-attack">
-                <div class="animation-box">
-                    <svg class="stats-loaded-circle">
-                        <circle cx="50%" cy="50%" r="50%"/>
-                    </svg>
-                    <div class="stats-bg-circle"></div>
-                    <span class="stat-value">80</span>
-                </div>
-                <span class="stat-name">
-                    Sp-Attack
-                </span>
-            </div>
-            <div class="stats-grid-item stat-sp-defense">
-                <div class="animation-box">
-                    <svg class="stats-loaded-circle">
-                        <circle cx="50%" cy="50%" r="50%"/>
-                    </svg>
-                    <div class="stats-bg-circle"></div>
-                    <span class="stat-value">80</span>
-                </div>
-                <span class="stat-name">
-                    Sp-Defense
-                </span>
-            </div>
-            <div class="stats-grid-item stat-init">
-                <div class="animation-box">
-                    <svg class="stats-loaded-circle">
-                        <circle cx="50%" cy="50%" r="50%"/>
-                    </svg>
-                    <div class="stats-bg-circle"></div>
-                    <span class="stat-value">80</span>
-                </div>
-                <span class="stat-name">
-                    Initiative
-                </span>
-            </div>
-        </div>
-    </div>
-    <h2>Abilities & Evolutions</h2>
-    <div class="grid-details-two">
-        <div class="details-panel panel-5">
-            <div class="abilities-content">
-                <div class="ability-one">
-                    <span>Pressure</span>
-                    <p>Increases the PP cost of moves targetting the Pokémon by one.</p>
-                </div>
-                <div class="abilities-break"></div>
-                <div class="ability-two">
-                    <span>Multiscale (hidden)</span>
-                    <p>This Pokémon takes half as much damage when it is hit having full HP.</p>
-                </div>
-            </div>
-            <div class="bg-shape-abilities"></div>
-            <img src="./res/circles-bg-2.svg">
-        </div>
-        <div class="details-panel panel-6">
-            <div class="grid-item evolution-item">
-                <div class="item-top">
-                    <span class="item-id">#001</span>
-                    <div class="img-box">
-                        <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
-                    </div>
-                    <span class="item-name">Lugia</span>
-                    <div class="item-arrow">
-                        <i class="ri-arrow-drop-right-line"></i>
-                    </div>
-                </div>
-                <div class="item-bottom"></div>
-            </div>
-            <div class="evolution-btn-box">
-                <div class="arrow-btn">
-                    <i class="ri-arrow-right-s-line"></i>
-                </div>
-            </div>
-            <div class="grid-item evolution-item">
-                <div class="item-top">
-                    <span class="item-id">#001</span>
-                    <div class="img-box">
-                        <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
-                    </div>
-                    <span class="item-name">Lugia</span>
-                    <div class="item-arrow">
-                        <i class="ri-arrow-drop-right-line"></i>
-                    </div>
-                </div>
-                <div class="item-bottom"></div>
-            </div>
-            <div class="evolution-btn-box">
-                <div class="arrow-btn">
-                    <i class="ri-arrow-right-s-line"></i>
-                </div>
-            </div>
-            <div class="grid-item evolution-item">
-                <div class="item-top">
-                    <span class="item-id">#001</span>
-                    <div class="img-box">
-                        <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
-                    </div>
-                    <span class="item-name">Lugia</span>
-                    <div class="item-arrow">
-                        <i class="ri-arrow-drop-right-line"></i>
-                    </div>
-                </div>
-                <div class="item-bottom"></div>
-            </div>
-        </div>
-    </div>
-    <h2>Special Forms</h2>
-    <div class="grid-details-two">
-        <div class="details-panel panel-7">
-            <div class="grid-item evolution-item">
-                <div class="item-top">
-                    <span class="item-id">#001</span>
-                    <div class="img-box">
-                        <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
-                    </div>
-                    <span class="item-name">Lugia</span>
-                    <div class="item-arrow">
-                        <i class="ri-arrow-drop-right-line"></i>
-                    </div>
-                </div>
-                <div class="item-bottom"></div>
-            </div>
-            <div class="grid-item evolution-item">
-                <div class="item-top">
-                    <span class="item-id">#001</span>
-                    <div class="img-box">
-                        <img src="./res/249-sprite.png" alt="Lugia" class="item-img">
-                    </div>
-                    <span class="item-name">Lugia</span>
-                    <div class="item-arrow">
-                        <i class="ri-arrow-drop-right-line"></i>
-                    </div>
-                </div>
-                <div class="item-bottom"></div>
-            </div>
-        </div>
-    </div>
-*/
-
-
-
-
