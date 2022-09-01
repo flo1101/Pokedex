@@ -127,6 +127,16 @@ function firstLetterUppercase(str) {
     return res.join("-");
 }
 
+function addHorizontalScrollability(className) {
+    const obj = document.querySelector(`.${className}`);
+    obj.addEventListener("wheel", e => {
+        if (obj.scrollWidth > obj.clientWidth) {
+            e.preventDefault();
+            obj.scrollLeft += e.deltaY;
+        }
+    })
+}
+
 
 // Fetch
 async function fetchData(url) {
@@ -137,6 +147,7 @@ async function fetchData(url) {
         console.log("ERROR: ", e);
     }
 }
+
 
 
 // Search Pokemon
@@ -224,6 +235,7 @@ async function removeTypeFilter() {
         activeTypeFilter.forEach(filterName => applyTypeFilter(filterName))
     }
 }
+
 
 
 // Detail Pages
@@ -361,6 +373,8 @@ async function displayDetailPage(pokemonName) {
     addValuesDetailPage(pokemon);
     detailBox.style.display = "flex";
     window.scrollTo(0, 0);
+    addHorizontalScrollability("panel-6");
+    addHorizontalScrollability("panel-7");
     addBackBtnEvent();
 }
 

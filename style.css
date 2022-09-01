@@ -179,6 +179,7 @@ header {
     background: var(--bg-gradient-orange-r);
     position: relative;
     overflow: hidden;
+    min-height: 300px;
 }
 
 .overlay-content > div {
@@ -585,6 +586,7 @@ circle{
     max-width: 70rem;
     display: grid;
     grid-gap: 1.3rem;
+    overflow: hidden;
 }
 
 .panel-5 {
@@ -639,7 +641,12 @@ width: 70%;
 .panel-6, .panel-7 {
     background-color: rgba(255, 255, 255, 0.1);
     display: flex;
-    justify-content: space-around;
+    overflow: auto;
+}
+
+.panel-6::before, .panel-6::after, .panel-7::before, .panel-7::after {
+    content: "";
+    margin: auto;
 }
 
 .panel-6 > span, .panel-7 > span {
@@ -648,13 +655,15 @@ width: 70%;
 }
 
 .evolution-item {
-    width: 13rem;
+    min-width: 15rem;
+    margin: .7rem;
 }
 
 .evolution-btn-box {
     height: 100%;
     display: flex;
     align-items: center;
+    margin: 0 2rem;
 }
 
 .evolution-btn-box > .arrow-btn:hover{
