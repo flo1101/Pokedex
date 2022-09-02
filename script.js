@@ -134,7 +134,8 @@ function addHorizontalScrollability(className) {
     obj.addEventListener("wheel", e => {
         if (obj.scrollWidth > obj.clientWidth) {
             e.preventDefault();
-            obj.scrollLeft += e.deltaY;
+            // obj.scrollLeft += e.deltaY;
+            obj.scrollLeft += e.deltaX;
         }
     })
 }
@@ -256,7 +257,22 @@ async function displayDetailPage(pokemonName) {
     settingsBar.style.display = "none";
     gridBox.style.display = "none";
     detailBox.innerHTML =
-           `<div class="grid-details-one">
+           `<div class="settings-bar">
+                <div class="prev-pokemon">
+                    <i class="ri-arrow-left-s-line"></i>
+                    <div class="settings-prev-id"></div>
+                    <div class="settings-prev-name"></div>
+                </div>
+                <div id="details-back-btn">
+                    <i class="ri-home-2-fill"></i>
+                </div>
+                <div class="next-pokemon">
+                    <div class="settings-next-name"></div>
+                    <div class="settings-next-id"></div>
+                    <i class="ri-arrow-right-s-line"></i>
+                </div>
+            </div>
+            <div class="grid-details-one">
                 <div class="details-panel panel-1">
                     <div class="details-img-box">
                         <img class="details-img" src="" alt="">
@@ -371,7 +387,7 @@ async function displayDetailPage(pokemonName) {
 
     addValuesDetailPage(pokemon);
     detailBox.style.display = "flex";
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
     addHorizontalScrollability("panel-6");
     addHorizontalScrollability("panel-7");
     addBackBtnEvent();
@@ -396,6 +412,7 @@ function addBackBtnEvent() {
 
 async function addValuesDetailPage(pokemon) {
     addNameImgDescID(pokemon);
+    addSettingsButton(pokemon);
     addTypes(pokemon);
     addProps(pokemon);
     addStats(pokemon);
@@ -404,6 +421,38 @@ async function addValuesDetailPage(pokemon) {
     await addEvolutions(pokemon);
     addSpecialForms(pokemon);
 }
+
+function addSettingsButton(pokemon) {
+    addPrevBtn(pokemon);
+    addNextBtn(pokemon);
+}
+
+function addPrevBtn(pokemon) {
+    const prevBtn = document.querySelector(".prev-pokemon");
+    const prevID = document.querySelector(".settings-prev-id");
+    const prevName = document.querySelector(".settings-prev-name");
+    const id = pokemon.id === 1 ? nationalDex.length : pokemon.id - 1;
+    const prevPokemon = nationalDex.find(e => e.id === id);
+    prevID.textContent = getDisplayableID(prevPokemon.id);
+    prevName.textContent = firstLetterUppercase(prevPokemon.name);
+    prevBtn.addEventListener("click", () => {
+        displayDetailPage(prevPokemon.name);
+    })
+}
+
+function addNextBtn(pokemon) {
+    const nextBtn = document.querySelector(".next-pokemon");
+    const nextID = document.querySelector(".settings-next-id");
+    const nextName = document.querySelector(".settings-next-name");
+    const id = pokemon.id === nationalDex.length ? 1 : pokemon.id + 1;
+    const nextPokemon = nationalDex.find(e => e.id === id);
+    nextID.textContent = getDisplayableID(nextPokemon.id);
+    nextName.textContent = firstLetterUppercase(nextPokemon.name);
+    nextBtn.addEventListener("click", () => {
+        displayDetailPage(nextPokemon.name);
+    })
+}
+
 
 function addNameImgDescID(pokemon) {
     const id = getDisplayableID(pokemon.id);

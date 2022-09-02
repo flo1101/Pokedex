@@ -443,26 +443,24 @@ input {
 }
 
 .settings-bar {
-    width: 100%;
-    height: 3rem;
-    margin-bottom: 7rem;
-    border-radius: 1.5rem;
+    width: 90%;
+    max-width: 70rem;
+    height: 4rem;
+    border-radius: 2rem;
     overflow: hidden;
+    margin-bottom: 2rem;
 }
 
 .settings-bar > div {
     height: 100%;
-    background-color: #545454;
+    background-color: rgb(67, 67, 67);
     border-radius: .3rem;
     transition: .2s;
 }
 
-.settings-bar > div:hover {
-    background-color: #545454;
-    cursor: pointer;
-}
 
 .settings-bar > div > i {
+    color: #bababa;
     transform: scale(2);
 }
 
@@ -483,6 +481,16 @@ input {
     margin-right: 1.2rem;
 }
 
+.next-pokemon:hover, .prev-pokemon:hover {
+    background-color: #2cd0e8;
+    cursor: pointer;
+}
+
+.next-pokemon:hover > i, .prev-pokemon:hover > i {
+    color: #ffffff;
+    cursor: pointer;
+}
+
 #details-back-btn {
     display: flex;
     align-items: center;
@@ -490,19 +498,37 @@ input {
     margin: 0 .5rem;
     white-space: nowrap;
     padding: 0 1.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
 }
 
-/*
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    background-color: rgb(67, 67, 67);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+#details-back-btn > i {
+    transform: scale(1.3);
     transition: .2s;
-    font-size: 2rem;*/
+}
+
+#details-back-btn:hover {
+    background-color: #616161;
+}
+
+#details-back-btn:hover > i {
+    color: #2cd0e8;
+    color: #fff;
+}
+
+
+.settings-prev-id, .settings-next-id {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.settings-prev-name, .settings-next-name {
+    color: #242424;
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+
 
 
 .grid-details-one {
