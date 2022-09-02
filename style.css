@@ -1119,6 +1119,12 @@ width: 70%;
     }
 }
 
+@media (max-width: 700px) {
+    .settings-prev-name, .settings-next-name {
+        display: none;
+    }
+}
+
 
 @media (max-width: 500px) {
 
