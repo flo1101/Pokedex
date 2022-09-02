@@ -15,7 +15,6 @@ let displayedItems;
 
 // Initial Page Load
 window.addEventListener("load", async () => {
-    alertBox.innerHTML = "Loading Pokédex...";
     await fillNationalDex();
     displayPokemon(nationalDex);
     alertBox.style.display = "none";
