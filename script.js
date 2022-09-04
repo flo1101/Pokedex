@@ -23,7 +23,6 @@ window.addEventListener("load", async () => {
     await addContentPanels();
     displayedItems = nationalDex.slice();
     loading = false;
-    addDetailPageLinks("item-top");
     addOverlayBackBtnFunction();
     }
 );
@@ -50,7 +49,7 @@ function addPreloadPanels() {
                             <i class="ri-arrow-drop-right-line"></i>
                         </div>
                     </div>
-                    <div class="item-bottom"></div>
+                    <div class="item-bottom hide"></div>
                 </div>`
     }
     gridBox.innerHTML = html;
@@ -83,13 +82,19 @@ function displayPanel(entry) {
     const pokemon = nationalDex[entry.entry_number - 1];
     const gridItem = gridBox.children[entry.entry_number - 1];
     const itemTop = gridItem.querySelector(".item-top");
+
     itemTop.classList.remove("preload-panel");
     itemTop.querySelector(".img-box").appendChild(createSpriteImg(pokemon));
     itemTop.querySelector(".item-id").textContent = getDisplayableID(pokemon.id);
     itemTop.querySelector(".item-name").textContent = firstLetterUppercase(pokemon.name);
-    gridItem.querySelector(".item-bottom").style.display = "block";
+    gridItem.querySelector(".item-bottom").classList.remove("hide");
     gridItem.classList.add("grid-item-hover");
     itemTop.classList.add("item-top-hover");
+
+    itemTop.addEventListener("click", async e => {
+        const pokemonName = e.currentTarget.querySelector(".item-name").textContent.toLowerCase();
+        await displayDetailPage(pokemonName);
+    })
 }
 
 function createSpriteImg(pokemon) {

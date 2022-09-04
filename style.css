@@ -353,7 +353,6 @@ input {
 }
 
 .item-bottom {
-    display: none;
     position: absolute;
     top: 0;
     background: var(--bg-gradient-orange-l);
@@ -362,6 +361,10 @@ input {
     border-radius: 1rem;
     transition: .2s;
     transition-timing-function: ease-in-out;
+}
+
+.hide {
+    display: none;
 }
 
 .grid-item-hover:hover > .item-top, .grid-item-hover:hover > .form-item-top {
