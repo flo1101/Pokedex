@@ -449,7 +449,7 @@ async function displayDetailPage(pokemonName) {
 
     addValuesDetailPage(pokemon);
     detailBox.style.display = "flex";
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 400);
     addHorizontalScrollability("panel-6");
     addHorizontalScrollability("panel-7");
     addBackBtnEvent();
