@@ -229,6 +229,8 @@ header {
     align-items: center;
     justify-content: center;
     font-size: 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
 }
 
 #to-top-btn {
