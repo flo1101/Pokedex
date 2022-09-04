@@ -8,40 +8,96 @@ const gridBox = document.querySelector("#grid-box");
 const detailBox = document.querySelector("#detail-box");
 const overlayBox = document.querySelector("#overlay-box");
 
+let simpleNationalDex = [];
 let nationalDex = [];
 let specialForms = [];
 let displayedItems;
+let loading = true;
 
 
 // Initial Page Load
 window.addEventListener("load", async () => {
-    await fillNationalDex();
-    displayPokemon(nationalDex);
     alertBox.style.display = "none";
+    await fetchNationalDex();
+    addPreloadPanels();
+    await addContentPanels();
     displayedItems = nationalDex.slice();
+    loading = false;
     addDetailPageLinks("item-top");
     addOverlayBackBtnFunction();
     }
 );
 
-async function fillNationalDex() {
+async function fetchNationalDex() {
     try {
         const res = await fetch("https://pokeapi.co/api/v2/pokedex/1");
         const data = await res.json();
-        for (const entry of data.pokemon_entries) {
-            const pokemonRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${entry.entry_number}`);
-            const pokemonData = await pokemonRes.json();
-            let pokemon = {
-                "id": entry.entry_number,
-                "name": entry.pokemon_species.name,
-                "pokemonData": pokemonData,
-                "speciesData": null
-            }
-            nationalDex.push(pokemon);
+        simpleNationalDex = data.pokemon_entries.slice();
+    } catch (e) {
+        console.log("ERROR: ", e);
+    }
+}
+
+function addPreloadPanels() {
+    let html = "";
+    for (let i = 0; i < simpleNationalDex.length; i++) {
+        html += `<div class="grid-item">
+                    <div class="item-top preload-panel">
+                        <span class="item-id"></span>
+                        <div class="img-box"></div>
+                        <span class="item-name"></span>
+                        <div class="item-arrow">
+                            <i class="ri-arrow-drop-right-line"></i>
+                        </div>
+                    </div>
+                    <div class="item-bottom"></div>
+                </div>`
+    }
+    gridBox.innerHTML = html;
+}
+
+async function addContentPanels() {
+    try {
+        for (const entry of simpleNationalDex) {
+            await addToNationalDex(entry);
+            displayPanel(entry);
         }
     } catch (e) {
         console.log("ERROR: ", e);
     }
+}
+
+async function addToNationalDex(entry) {
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${entry.entry_number}`);
+    const data = await res.json();
+    let pokemon = {
+        "id": entry.entry_number,
+        "name": entry.pokemon_species.name,
+        "pokemonData": data,
+        "speciesData": null
+    }
+    nationalDex.push(pokemon);
+}
+
+function displayPanel(entry) {
+    const pokemon = nationalDex[entry.entry_number - 1];
+    const gridItem = gridBox.children[entry.entry_number - 1];
+    const itemTop = gridItem.querySelector(".item-top");
+    itemTop.classList.remove("preload-panel");
+    itemTop.querySelector(".img-box").appendChild(createSpriteImg(pokemon));
+    itemTop.querySelector(".item-id").textContent = getDisplayableID(pokemon.id);
+    itemTop.querySelector(".item-name").textContent = firstLetterUppercase(pokemon.name);
+    gridItem.querySelector(".item-bottom").style.display = "block";
+    gridItem.classList.add("grid-item-hover");
+    itemTop.classList.add("item-top-hover");
+}
+
+function createSpriteImg(pokemon) {
+    let img = document.createElement("img");
+    img.setAttribute("src", pokemon.pokemonData.sprites.front_default)
+    img.setAttribute("alt", firstLetterUppercase(pokemon.name));
+    img.classList.add("item-img");
+    return img;
 }
 
 function displayPokemon(pokemon) {
@@ -57,8 +113,8 @@ function createItemHtml(pokemon) {
     const name = firstLetterUppercase(pokemon.name);
     const id = getDisplayableID(pokemon.id);
     const sprite = pokemon.pokemonData.sprites.front_default;
-    return `<div class="grid-item">
-                <div class="item-top">
+    return `<div class="grid-item grid-item-hover">
+                <div class="item-top item-top-hover">
                     <span class="item-id">${id}</span>
                     <div class="img-box">
                         <img src="${sprite}" alt="${name}" class="item-img">
@@ -77,8 +133,8 @@ function createEvoItemHtml(pokemon) {
     const id = getDisplayableID(pokemon.id);
     let spriteURL = pokemon.pokemonData.sprites.front_default;
     spriteURL = spriteURL === null ? "./res/no-img.svg" : spriteURL;
-    return `<div class="grid-item evolution-item">
-                <div class="item-top">
+    return `<div class="grid-item evolution-item grid-item-hover">
+                <div class="item-top item-top-hover">
                     <span class="item-id">${id}</span>
                     <div class="img-box">
                         <img class="item-img" src="${spriteURL}" alt="${name}">
@@ -96,8 +152,8 @@ async function createFormItemHtml(form) {
     const name = firstLetterUppercase(form.name);
     let spriteURL = form.pokemonData.sprites.front_default;
     spriteURL = spriteURL === null ? "./res/no-img.svg" : spriteURL;
-    return `<div class="grid-item evolution-item">
-                <div class="form-item-top">
+    return `<div class="grid-item evolution-item grid-item-hover">
+                <div class="form-item-top item-top-hover">
                     <div class="img-box">
                         <img class="item-img" src="${spriteURL}" alt="${name}">
                     </div>
@@ -155,7 +211,8 @@ async function fetchData(url) {
 // Search Pokemon
 
 form.addEventListener("keyup", e => {
-    if (e.keyCode === 13) return;
+    if (loading || e.keyCode === 13) return;
+    console.log("no stop")
     searchPokemon();
     addDetailPageLinks("item-top");
 })
@@ -184,6 +241,7 @@ let dropdownIsVisible = false;
 typeFilterBtn.addEventListener("click", showTypeDropdown);
 
 function showTypeDropdown() {
+    if (loading) return;
     const dropdown = document.querySelector("#type-dropdown");
     const arrow = document.querySelector(".filter-arrow");
     if (!dropdownIsVisible) {

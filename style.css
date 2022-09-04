@@ -342,7 +342,18 @@ input {
     z-index: 2;
 }
 
+.preload-panel {
+    width: 100%;
+    height: 100%;
+    background-color: #545454;
+    border-radius: 1rem;
+    transition: .2s;
+    transition-timing-function: ease-in-out;
+    cursor: auto;
+}
+
 .item-bottom {
+    display: none;
     position: absolute;
     top: 0;
     background: var(--bg-gradient-orange-l);
@@ -353,15 +364,15 @@ input {
     transition-timing-function: ease-in-out;
 }
 
-.grid-item:hover > .item-top, .grid-item:hover > .form-item-top {
+.grid-item-hover:hover > .item-top, .grid-item-hover:hover > .form-item-top {
     transform: translate(0.25rem, -0.25rem);
 }
 
-.grid-item:hover > .item-bottom {
+.grid-item-hover:hover > .item-bottom {
     transform: translate(-0.25rem, 0.25rem);
 }
 
-.item-top:hover > .item-arrow, .form-item-top:hover > .item-arrow {
+.item-top-hover:hover > .item-arrow, .form-item-top:hover > .item-arrow {
     transform: scale(1);
 }
 
