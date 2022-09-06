@@ -24,8 +24,16 @@ window.addEventListener("load", async () => {
     displayedItems = nationalDex.slice();
     loading = false;
     addOverlayBackBtnFunction();
+    stopLoadingAnimaton();
     }
 );
+
+function stopLoadingAnimaton() {
+    const loadingBox = document.querySelector(".loading-alert");
+    const loadingIcon = document.querySelector(".ri-refresh-line");
+    loadingBox.style.display = "none";
+    loadingIcon.style.animationPlayState = "paused";
+}
 
 async function fetchNationalDex() {
     try {
